@@ -10,7 +10,7 @@ package Models;
  * @author josepgrs
  */
 public class User {
-    private String email,password;
+    private String email,nome,password;
     
     public User(String email, String password) {
         this.email = email;
@@ -26,14 +26,13 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    
+   public Boolean passwordValida(String pass){
+       return this.password.equals(pass);
+   }
     
    
-    
+   public String getNome(){
+        return this.nome;
+   }
 }

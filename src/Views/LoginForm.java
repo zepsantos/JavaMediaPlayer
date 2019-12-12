@@ -6,7 +6,7 @@
 package Views;
 
 import Models.MediaCenter;
-import dss.MainForm;
+import Views.MainForm;
 
 /**
  *

@@ -3,7 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dss;
+package Views;
+
+import Models.MediaCenter;
+import javax.swing.Icon;
 
 /**
  *
@@ -17,6 +20,8 @@ public class MainForm extends javax.swing.JFrame {
     public MainForm() {
         
         initComponents();
+        loadUser();
+        
     }
 
     /**
@@ -57,10 +62,12 @@ public class MainForm extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(67, 104, 145));
 
         utilizadorLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        utilizadorLabel.setIcon(new javax.swing.ImageIcon("C:\\Users\\Pedro Gomes\\Desktop\\DSSMediaCenter\\src\\Views\\DssIcons\\Icons\\baseline_face_black_18dp.png")); // NOI18N
         utilizadorLabel.setText("Utilizador:");
 
         myContentButton.setBackground(new java.awt.Color(67, 104, 145));
         myContentButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        myContentButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Pedro Gomes\\Desktop\\DSSMediaCenter\\src\\Views\\DssIcons\\Icons\\baseline_home_black_18dp.png")); // NOI18N
         myContentButton.setText("Meu Conteudo");
         myContentButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         myContentButton.addActionListener(new java.awt.event.ActionListener() {
@@ -71,16 +78,19 @@ public class MainForm extends javax.swing.JFrame {
 
         downloadButton.setBackground(new java.awt.Color(67, 104, 145));
         downloadButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        downloadButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Pedro Gomes\\Desktop\\DSSMediaCenter\\src\\Views\\DssIcons\\Icons\\baseline_cloud_download_black_18dp.png")); // NOI18N
         downloadButton.setText("Download Conteudo");
         downloadButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
         uploadButton.setBackground(new java.awt.Color(67, 104, 145));
         uploadButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        uploadButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Pedro Gomes\\Desktop\\DSSMediaCenter\\src\\Views\\DssIcons\\Icons\\baseline_cloud_upload_black_18dp.png")); // NOI18N
         uploadButton.setText("Upload Conteudo");
         uploadButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
         friendsListButton.setBackground(new java.awt.Color(67, 104, 145));
         friendsListButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        friendsListButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Pedro Gomes\\Desktop\\DSSMediaCenter\\src\\Views\\DssIcons\\Icons\\baseline_contacts_black_18dp.png")); // NOI18N
         friendsListButton.setText("Ver lista de amigos");
         friendsListButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
@@ -201,7 +211,7 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -220,10 +230,15 @@ public class MainForm extends javax.swing.JFrame {
         compositorLabel.setText("Compositor");
 
         skipBackButton.setBackground(new java.awt.Color(133, 136, 139));
-        skipBackButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/baseline_skip_previous_black_18dp.png"))); // NOI18N
+        skipBackButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Pedro Gomes\\Desktop\\DSSMediaCenter\\src\\Views\\DssIcons\\Icons\\baseline_skip_previous_black_18dp.png")); // NOI18N
+        skipBackButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                skipBackButtonActionPerformed(evt);
+            }
+        });
 
         stopButton.setBackground(new java.awt.Color(133, 136, 139));
-        stopButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/baseline_stop_black_18dp.png"))); // NOI18N
+        stopButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Views/baseline_play_arrow_black_18dp.png"))); // NOI18N
         stopButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 stopButtonActionPerformed(evt);
@@ -231,10 +246,15 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         skipFwdButton.setBackground(new java.awt.Color(133, 136, 139));
-        skipFwdButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/baseline_skip_next_black_18dp.png"))); // NOI18N
+        skipFwdButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Pedro Gomes\\Desktop\\DSSMediaCenter\\src\\Views\\DssIcons\\Icons\\baseline_skip_next_black_18dp.png")); // NOI18N
+        skipFwdButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                skipFwdButtonActionPerformed(evt);
+            }
+        });
 
         soundVolumeButton.setBackground(new java.awt.Color(133, 136, 139));
-        soundVolumeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/baseline_volume_up_black_18dp.png"))); // NOI18N
+        soundVolumeButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Pedro Gomes\\Desktop\\DSSMediaCenter\\src\\Views\\DssIcons\\Icons\\baseline_volume_up_black_18dp.png")); // NOI18N
         soundVolumeButton.setText(" ");
 
         progressBar.setBackground(new java.awt.Color(230, 230, 230));
@@ -313,11 +333,89 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_myContentButtonActionPerformed
 
-    private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_stopButtonActionPerformed
+    private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        MediaCenter mn = MediaCenter.getInstance();
+       
+       if(mn.getEstado().equals("stop")){
+           mn.play();
+           //this.stopButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Pedro Gomes\\Desktop\\DSSMediaCenter\\src\\Views\\DssIcons\\Icons\\baseline_stop_black_18dp.png"));
+       
+       }else if(mn.getEstado().equals("play")){
+           mn.stop();
+           stopButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Views/baseline_play_arrow_black_18dp.png")));
+       }
+    }                                          
 
   
+    
+    public void loadUser(){
+        MediaCenter mn = MediaCenter.getInstance();
+        String nome = mn.getUser().getNome();
+        this.utilizadorLabel.setText("Utilizador: "+nome);
+        //mn.readANDinit();
+        updateMetaData();
+    }
+    
+    
+    public void updateMetaData(){
+       /* MediaCenter mn = MediaCenter.getInstance();
+        String[] prt = mn.getCurrentMusic();
+        this.musicNameLabel.setText(prt[1]);
+        this.compositorLabel.setText(prt[0]);  */
+    }
+    
+    
+
+    private void skipFwdButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_skipFwdButtonActionPerformed
+        MediaCenter mn = MediaCenter.getInstance();
+        stopButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Views/baseline_play_arrow_black_18dp.png")));
+       // mn.skip_next_song();
+        updateMetaData();
+        
+    }//GEN-LAST:event_skipFwdButtonActionPerformed
+
+    private void skipBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_skipBackButtonActionPerformed
+        MediaCenter mn = MediaCenter.getInstance();
+        stopButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Views/baseline_play_arrow_black_18dp.png")));
+        //mn.skip_previous_song();
+        updateMetaData();
+    }//GEN-LAST:event_skipBackButtonActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new MainForm().setVisible(true);
+            }
+        });
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel albumLabel;
