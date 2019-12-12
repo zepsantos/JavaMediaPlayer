@@ -348,6 +348,7 @@ public class MainForm extends javax.swing.JFrame {
         String[] prt = mn.getCurrentMusic();
         this.musicNameLabel.setText(prt[1]);
         this.compositorLabel.setText(prt[0]);
+        
     }
     
     
