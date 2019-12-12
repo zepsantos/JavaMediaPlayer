@@ -20,13 +20,7 @@ public class MainForm extends javax.swing.JFrame {
     public MainForm() {
         
         initComponents();
-        String nome = MediaCenter.getInstance().getUser().getNome();
-        this.utilizadorLabel.setText("Utilizador: "+nome);
-        MediaCenter mn = MediaCenter.getInstance();
-        //mn.readPlaylist("\\Conteudo");
-        mn.setFile("Conteudo\\\\Teste.wav");
-        mn.init();
-        
+        loadUser();
         
     }
 
@@ -217,7 +211,7 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -237,6 +231,11 @@ public class MainForm extends javax.swing.JFrame {
 
         skipBackButton.setBackground(new java.awt.Color(133, 136, 139));
         skipBackButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Pedro Gomes\\Desktop\\DSSMediaCenter\\src\\Views\\DssIcons\\Icons\\baseline_skip_previous_black_18dp.png")); // NOI18N
+        skipBackButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                skipBackButtonActionPerformed(evt);
+            }
+        });
 
         stopButton.setBackground(new java.awt.Color(133, 136, 139));
         stopButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Views/baseline_play_arrow_black_18dp.png"))); // NOI18N
@@ -248,6 +247,11 @@ public class MainForm extends javax.swing.JFrame {
 
         skipFwdButton.setBackground(new java.awt.Color(133, 136, 139));
         skipFwdButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Pedro Gomes\\Desktop\\DSSMediaCenter\\src\\Views\\DssIcons\\Icons\\baseline_skip_next_black_18dp.png")); // NOI18N
+        skipFwdButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                skipFwdButtonActionPerformed(evt);
+            }
+        });
 
         soundVolumeButton.setBackground(new java.awt.Color(133, 136, 139));
         soundVolumeButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Pedro Gomes\\Desktop\\DSSMediaCenter\\src\\Views\\DssIcons\\Icons\\baseline_volume_up_black_18dp.png")); // NOI18N
@@ -329,6 +333,25 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_myContentButtonActionPerformed
 
+    
+    public void loadUser(){
+        MediaCenter mn = MediaCenter.getInstance();
+        String nome = mn.getUser().getNome();
+        this.utilizadorLabel.setText("Utilizador: "+nome);
+        mn.readANDinit();
+        updateMetaData();
+    }
+    
+    
+    public void updateMetaData(){
+        MediaCenter mn = MediaCenter.getInstance();
+        String[] prt = mn.getCurrentMusic();
+        this.musicNameLabel.setText(prt[1]);
+        this.compositorLabel.setText(prt[0]);
+    }
+    
+    
+    
     private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
        MediaCenter mn = MediaCenter.getInstance();
        
@@ -343,6 +366,21 @@ public class MainForm extends javax.swing.JFrame {
        
        
     }//GEN-LAST:event_stopButtonActionPerformed
+
+    private void skipFwdButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_skipFwdButtonActionPerformed
+        MediaCenter mn = MediaCenter.getInstance();
+        stopButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Views/baseline_play_arrow_black_18dp.png")));
+        mn.skip_next_song();
+        updateMetaData();
+        
+    }//GEN-LAST:event_skipFwdButtonActionPerformed
+
+    private void skipBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_skipBackButtonActionPerformed
+        MediaCenter mn = MediaCenter.getInstance();
+        stopButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Views/baseline_play_arrow_black_18dp.png")));
+        mn.skip_previous_song();
+        updateMetaData();
+    }//GEN-LAST:event_skipBackButtonActionPerformed
 
     /**
      * @param args the command line arguments
