@@ -92,6 +92,9 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="18" style="0"/>
             </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="2" name="C:\Users\Pedro Gomes\Desktop\DSSMediaCenter\src\Views\DssIcons\Icons\baseline_face_black_18dp.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Utilizador:"/>
           </Properties>
         </Component>
@@ -102,6 +105,9 @@
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="18" style="0"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="2" name="C:\Users\Pedro Gomes\Desktop\DSSMediaCenter\src\Views\DssIcons\Icons\baseline_home_black_18dp.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Meu Conteudo"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
@@ -118,6 +124,9 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="18" style="0"/>
             </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="2" name="C:\Users\Pedro Gomes\Desktop\DSSMediaCenter\src\Views\DssIcons\Icons\baseline_cloud_download_black_18dp.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Download Conteudo"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
@@ -130,6 +139,9 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="18" style="0"/>
             </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="2" name="C:\Users\Pedro Gomes\Desktop\DSSMediaCenter\src\Views\DssIcons\Icons\baseline_cloud_upload_black_18dp.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Upload Conteudo"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
@@ -141,6 +153,9 @@
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="18" style="0"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="2" name="C:\Users\Pedro Gomes\Desktop\DSSMediaCenter\src\Views\DssIcons\Icons\baseline_contacts_black_18dp.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Ver lista de amigos"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
@@ -161,7 +176,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
                   <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="23" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -391,6 +406,9 @@
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="8b" green="88" red="85" type="rgb"/>
             </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="2" name="C:\Users\Pedro Gomes\Desktop\DSSMediaCenter\src\Views\DssIcons\Icons\baseline_skip_previous_black_18dp.png"/>
+            </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="stopButton">
@@ -398,12 +416,21 @@
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="8b" green="88" red="85" type="rgb"/>
             </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Views/baseline_play_arrow_black_18dp.png"/>
+            </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="stopButtonActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="skipFwdButton">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="8b" green="88" red="85" type="rgb"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="2" name="C:\Users\Pedro Gomes\Desktop\DSSMediaCenter\src\Views\DssIcons\Icons\baseline_skip_next_black_18dp.png"/>
             </Property>
           </Properties>
         </Component>
@@ -411,6 +438,9 @@
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="8b" green="88" red="85" type="rgb"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="2" name="C:\Users\Pedro Gomes\Desktop\DSSMediaCenter\src\Views\DssIcons\Icons\baseline_volume_up_black_18dp.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value=" "/>
           </Properties>
