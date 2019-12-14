@@ -40,8 +40,10 @@ public class MediaCenter {
         
     }
     
-    public void setFile(String path){
-        this.userContentList.add(new File(path));
+    public void addFile(File file){
+        
+        this.userContentList.add(file);
+       
     }
     
     
@@ -72,6 +74,7 @@ public class MediaCenter {
     }
     
     public String[] getCurrentMusic(){
+        if(this.userContentList.size() == 0)return null;
         String string = this.userContentList.get(index).toString();
         String doc = string.substring(9);
         String[] parts = doc.split("-|\\.");
@@ -79,6 +82,9 @@ public class MediaCenter {
         return parts;
     }
     
+    public int getPlayListSize(){
+        return this.userContentList.size();
+    }
     
     public void readPlaylist(){
        
