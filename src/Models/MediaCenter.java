@@ -6,14 +6,12 @@
 package Models;
 
 import DAO.UserDAO;
+import java.awt.List;
 import java.util.ArrayList;
 import java.io.File; 
 import java.io.IOException;
-import java.nio.file.DirectoryStream; 
 import java.nio.file.Files; 
 import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.Set;
   
 import javax.sound.sampled.AudioInputStream; 
 import javax.sound.sampled.AudioSystem; 
@@ -29,7 +27,7 @@ public class MediaCenter {
     
     
     //private File currenteFilePlaying = null;
-    private ArrayList<File> userContentList = new ArrayList();
+    private ArrayList<File> userContentList;
     private int index = 0;
     
     private Clip clip;
@@ -39,7 +37,7 @@ public class MediaCenter {
     
 
     public MediaCenter() {
-        
+        this.userContentList = new ArrayList<>();
     }
     
     public void setFile(String path){
@@ -69,18 +67,33 @@ public class MediaCenter {
         return this.currentlyLoggedInUser;
     }
     
-    
-    public void skip_next_song(){
-        if(this.userContentList.size() == 0)return;
-        
-        if(this.userContentList.size() > index + 1){
-            index++;
-        }else{
-            index = 0;
-        }
-        //this.currenteFilePlaying = this.userContentList.get(index);
-    
+    public String getEstado(){
+        return this.estado;
     }
+    
+    public String[] getCurrentMusic(){
+        String string = this.userContentList.get(index).toString();
+        String doc = string.substring(9);
+        String[] parts = doc.split("-|\\.");
+        
+        return parts;
+    }
+    
+    
+    public void readPlaylist(){
+       
+        //Path p = Paths.get("C:\Users\Pedro Gomes\Desktop\DSSMediaCenter\Conteudo");
+        String[] pahnames;
+        
+        File f = new File("Conteudo\\\\");
+            
+        pahnames = f.list();
+            
+        for(String s : pahnames){
+            this.userContentList.add(new File("Conteudo\\\\"+s));
+        }       
+    }
+    
     public void init(){
         try{
             if(this.userContentList.get(index) != null){
@@ -96,6 +109,12 @@ public class MediaCenter {
         }
     }
     
+    public void readANDinit(){
+        readPlaylist();
+        init();
+    }
+    
+    
     public void play(){
         if(clip.getFramePosition()== clip.getFrameLength()){
             clip.setFramePosition(0);
@@ -109,27 +128,36 @@ public class MediaCenter {
         clip.stop();
         this.estado = "stop";
     }
+   
+   
     
-    public String getEstado(){
-        return this.estado;
-    }
-    
-    public void readPlaylist(String dir){
-       
-        //Path p = Paths.get("C:\Users\Pedro Gomes\Desktop\DSSMediaCenter\Conteudo");
+    public void skip_previous_song(){
+        stop();
+        if(this.userContentList.size() == 0)return;
         
-        File folder = new File(dir);
-        String[] files = null;
-        if(files != null){
-            files = folder.list();
-            return;
+        if(index > 0 ){
+            index--;
+        }else{
+            index = 0;
         }
-        for(String a : files){
-            System.out.println(a);
-            this.userContentList.add(new File(a));
-        }
-        System.out.println("estou aqui");
+        init();
+        //this.currenteFilePlaying = this.userContentList.get(index);
+    
     }
+    
+    public void skip_next_song(){
+        stop();
+        if(this.userContentList.size() == 0)return;
+        
+        if(this.userContentList.size() > index + 1){
+            index++;
+        }else{
+            index = 0;
+        }
+        init();
+        //this.currenteFilePlaying = this.userContentList.get(index);
+    }
+    
     
     
     
