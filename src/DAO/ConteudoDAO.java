@@ -55,7 +55,7 @@ public class ConteudoDAO implements Map<String,Conteudo> {
 
     @Override
     public Conteudo get(Object o) {
-        try(Connection con = DriverManager.getConnection("jdbc:mysql://localhost/mediacenter?user=root&password=1999pmqgslbop")){
+        /*try(Connection con = DriverManager.getConnection("jdbc:mysql://localhost/mediacenter?user=root&password=1999pmqgslbop")){
             con.setAutoCommit(false);
             PreparedStatement sql;
             sql = con.prepareStatement("SELECT * FROM tconteudos WHERE nome=?");
@@ -67,14 +67,14 @@ public class ConteudoDAO implements Map<String,Conteudo> {
                 String cat = rs.getString("categoria");
                 int size = rs.getInt("tamanho");
                 //System.out.println(id + " " + nome + " " + cat + " " + size);
-                return new Conteudo(id,nome,"lol",cat,size);
+                return new Conteudo(id,nome,cat,);
             }
       
         con.commit();
         }catch(SQLException e){
             System.out.println("Deu merda na excessao do get");
             //con.rollback();
-        }
+        } */
         return null;
     }
 

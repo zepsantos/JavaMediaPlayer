@@ -7,44 +7,55 @@ package Models;
 
 import DAO.ConteudoDAO;
 import DAO.UserDAO;
-import java.awt.List;
 import java.util.ArrayList;
 import java.io.File; 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files; 
-import java.nio.file.Paths;
-  
-import javax.sound.sampled.AudioInputStream; 
-import javax.sound.sampled.AudioSystem; 
-import javax.sound.sampled.Clip; 
-
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.*;
+import javazoom.jl.player.advanced.AdvancedPlayer;
+import javazoom.jl.player.advanced.PlaybackListener;
+import org.farng.mp3.MP3File;
+import org.farng.mp3.TagException;
+import org.farng.mp3.id3.ID3v1;
 /**
  *
  * @author josepgrs
  */
 public class MediaCenter {
     private static MediaCenter inst = null;
-    private User currentlyLoggedInUser = null;
+    private User currentlyLoggedInUser;
     
     
     //private File currenteFilePlaying = null;
-    private ArrayList<File> userContentList = new ArrayList();
+    private ArrayList<Conteudo> userContentList;
+    private Conteudo currentlyContent;
     private int index = 0;
-    
-    private Clip clip;
-    private long currente_frame;
-    private String estado;
+    private Thread musicThread;
+    private Player player;
+    private int currentMusicPos;
+    private PlayerStatus musicPlaying;
     
     
 
     public MediaCenter() {
-        
+        this.userContentList = new ArrayList<>();
+        this.musicPlaying = PlayerStatus.STOP;
+        this.currentMusicPos = 0;
+        currentlyLoggedInUser = null;
     }
     
     public void addFile(File file){
         
-        ConteudoDAO ct = ConteudoDAO.getInstance();
-        this.userContentList.add(file);
+        //ConteudoDAO ct = ConteudoDAO.getInstance();
+        //this.userContentList.add(file);
   
        
     }
@@ -72,8 +83,8 @@ public class MediaCenter {
         return this.currentlyLoggedInUser;
     }
     
-    public String getEstado(){
-        return this.estado;
+    public PlayerStatus getStatus(){
+        return this.musicPlaying;
     }
     
     public String[] getCurrentMusic(){
@@ -89,59 +100,107 @@ public class MediaCenter {
         return this.userContentList.size();
     }
     
-    public void readPlaylist(){
+    public void readPlaylist() {
        
-        //Path p = Paths.get("C:\Users\Pedro Gomes\Desktop\DSSMediaCenter\Conteudo");
-        String[] pahnames;
+        //Path p = Paths.get("Conteudo/");
+        String[] pathnames;
         
-        File f = new File("Conteudo\\\\");
-            
-        pahnames = f.list();
-            
-        for(String s : pahnames){
-            this.userContentList.add(new File("Conteudo\\\\"+s));
-        }       
-    }
-    
-    public void init(){
-        try{
-            if(this.userContentList.get(index) != null){
-            AudioInputStream audio = AudioSystem.getAudioInputStream(this.userContentList.get(index).getAbsoluteFile());
-            clip = AudioSystem.getClip(); 
-            clip.open(audio);
-            estado = "stop";
-            
+        File f = new File("Conteudo/");
+        pathnames = f.list();
+        if(pathnames != null) {    
+        for(String path : pathnames){
+            //File tmp = new File("Conteudo/" + s));
+            try {
+                Conteudo tmp = getTagAndCreateContent(path);
+                if(tmp != null)
+                this.userContentList.add(tmp);
+            } catch (TagException e) {
+                //TODO: FAZER ALGUMA COISA QUANDO AS MUSICAS NAO TEM INFO, GUARDAR NOME FICHEIRO E REPRODUZIR
             }
-        }catch(Exception e){
-            System.out.println("Ficheiro nao encontrado");
-       
+      
+            //this.userContentList.add(new File("Conteudo/"+s));
+        }         
         }
     }
+    
+    private Conteudo getTagAndCreateContent(String path) throws TagException {
+        Conteudo content = null;
+        try {
+                MP3File tmp = new MP3File(new File("Conteudo/" + path));
+                if (tmp.hasID3v1Tag()) {
+                    ID3v1 id3v1Tag = tmp.getID3v1Tag();
+                    content = new Conteudo(0, id3v1Tag.getTitle(), id3v1Tag.getArtist(),"teste",path);
+                }
+            }catch (IOException e) {
+                System.out.println(e.getMessage());
+            } 
+        return content;
+    }
+        
+    
+    
+ 
     
     public void readANDinit(){
         readPlaylist();
-        init();
     }
     
+    private void reproduceMusic() {
+        currentlyContent = userContentList.get(index);
+        if(currentlyContent == null) return;
+        try {
+                File tmp = new File("Conteudo/" + currentlyContent.getPath());
+                System.out.println(tmp.length());
+                FileInputStream source = new FileInputStream(tmp);
+                player = new Player(source);
+                startMusicPlaying();   
+        }catch(JavaLayerException | IOException e) {
+                System.out.println("1");
+                e.printStackTrace();
+        }
+            
+           
+        musicPlaying = PlayerStatus.PLAYING;
+    }
+    
+    
+    private void startMusicPlaying() {
+        Runnable tmpR = new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            player.play();
+                        }catch( JavaLayerException e) {
+                            System.out.println("2");
+                            e.printStackTrace();
+                        }
+                    }
+               };
+               musicThread = new Thread(tmpR);
+               musicThread.start();
+    }
     
     public void play(){
-        if(clip.getFramePosition()== clip.getFrameLength()){
-            clip.setFramePosition(0);
-        }
-        clip.start();
-        this.estado = "play";
+        reproduceMusic();
+        this.musicPlaying = PlayerStatus.PLAYING;
     }
     
     
-    public void stop(){
-        clip.stop();
-        this.estado = "stop";
+    public void pause(){
+        currentMusicPos = player.getPosition();
+        System.out.println(currentMusicPos);
+        try {
+            player.close();
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
+        this.musicPlaying = PlayerStatus.PAUSE;
     }
    
    
     
     public void skip_previous_song(){
-        stop();
+        pause();
         if(this.userContentList.size() == 0)return;
         
         if(index > 0 ){
@@ -149,13 +208,12 @@ public class MediaCenter {
         }else{
             index = 0;
         }
-        init();
         //this.currenteFilePlaying = this.userContentList.get(index);
     
     }
     
     public void skip_next_song(){
-        stop();
+        pause();
         if(this.userContentList.size() == 0)return;
         
         if(this.userContentList.size() > index + 1){
@@ -163,7 +221,6 @@ public class MediaCenter {
         }else{
             index = 0;
         }
-        init();
         //this.currenteFilePlaying = this.userContentList.get(index);
     }
     

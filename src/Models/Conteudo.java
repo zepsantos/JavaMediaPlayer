@@ -9,34 +9,67 @@ package Models;
  *
  * @author Pedro Gomes
  */
-public class Conteudo {
+public class Conteudo { //TODO ADICIONAR ALBUM
     
     private int id_conteudo;
     private String artista;
     private String nome;
+    private String artista;
     private String categoria;
-    private long tamanho;
+    private String path;
+    private int tamanho; //TODO: REVER ISTO
 
 
-    public Conteudo(String name,String art,String cat,long tam){
-        this.id_conteudo = -1;
-        this.nome = name;
-        this.artista = art;
-        this.categoria = cat;
-        this.tamanho = tam;
-  
-    }
-    
-    
-    public Conteudo(int id,String name,String art,String cat,long tam){
+    public Conteudo(int id,String name,String artista,String cat,String path){
         this.id_conteudo = id;
         this.nome = name;
-        this.artista = art;
+        this.artista = artista;
         this.categoria = cat;
-        this.tamanho = tam;
+        this.tamanho = 0;
+        this.path = path;
   
     }
     
+    
+    public int getId_conteudo() {
+        return id_conteudo;
+    }
+
+    public void setId_conteudo(int id_conteudo) {
+        this.id_conteudo = id_conteudo;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public String getPath() {
+        return path;
+    }
+    
+     public void setPath(String path) {
+        this.path = path;
+    }
+
+    public int getTamanho() {
+        return tamanho;
+    }
+
+    public void setTamanho(int tamanho) {
+        this.tamanho = tamanho;
+    }
     
     
     
