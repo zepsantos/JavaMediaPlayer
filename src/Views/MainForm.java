@@ -359,6 +359,9 @@ public class MainForm extends javax.swing.JFrame {
             this.musicNameLabel.setText(prt[1]);
             this.compositorLabel.setText(prt[0]);
         }
+        
+        
+        
     }
     
     
@@ -397,26 +400,7 @@ public class MainForm extends javax.swing.JFrame {
 
     
     private void uploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadButtonActionPerformed
-        MediaCenter mc = MediaCenter.getInstance();
-        JFileChooser jfc = new JFileChooser();
-        if(jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
-            File f = jfc.getSelectedFile();
-           
-            try{    
-                Files.move(Paths.get(f.getPath()),Paths.get("C:\\Users\\Pedro Gomes\\Desktop\\DSSMediaCenter\\Conteudo\\"+f.getName())); 
-                mc.addFile(new File("Conteudo\\\\"+f.getName()));
-                if(mc.getPlayListSize() == 1){
-                    mc.init();
-                    this.updateMetaData();
-                }
-            
-            }catch(IOException e){
-                System.out.println("ERRO A COPIAR FICHEIRO");
-            }
-        }
-        
-     
-        
+        new UploadForm().setVisible(true);
     }//GEN-LAST:event_uploadButtonActionPerformed
 
     /**

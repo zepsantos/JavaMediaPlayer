@@ -67,7 +67,7 @@ public class ConteudoDAO implements Map<String,Conteudo> {
                 String cat = rs.getString("categoria");
                 int size = rs.getInt("tamanho");
                 //System.out.println(id + " " + nome + " " + cat + " " + size);
-                return new Conteudo(id,nome,cat,size);
+                return new Conteudo(id,nome,"lol",cat,size);
             }
       
         con.commit();

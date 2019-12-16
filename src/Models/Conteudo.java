@@ -12,21 +12,30 @@ package Models;
 public class Conteudo {
     
     private int id_conteudo;
+    private String artista;
     private String nome;
     private String categoria;
-    private int tamanho;
+    private long tamanho;
 
 
-    public Conteudo(int id,String name,String cat,int tam){
-        this.id_conteudo = id;
+    public Conteudo(String name,String art,String cat,long tam){
+        this.id_conteudo = -1;
         this.nome = name;
+        this.artista = art;
         this.categoria = cat;
         this.tamanho = tam;
   
     }
     
     
-    
+    public Conteudo(int id,String name,String art,String cat,long tam){
+        this.id_conteudo = id;
+        this.nome = name;
+        this.artista = art;
+        this.categoria = cat;
+        this.tamanho = tam;
+  
+    }
     
     
     

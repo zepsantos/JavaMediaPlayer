@@ -5,6 +5,7 @@
  */
 package Models;
 
+import DAO.ConteudoDAO;
 import DAO.UserDAO;
 import java.awt.List;
 import java.util.ArrayList;
@@ -42,7 +43,9 @@ public class MediaCenter {
     
     public void addFile(File file){
         
+        ConteudoDAO ct = ConteudoDAO.getInstance();
         this.userContentList.add(file);
+  
        
     }
     
