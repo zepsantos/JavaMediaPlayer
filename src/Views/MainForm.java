@@ -6,7 +6,12 @@
 package Views;
 
 import Models.MediaCenter;
-import javax.swing.Icon;
+import Models.PlayerStatus;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import javax.swing.JFileChooser;
 
 /**
  *
@@ -83,6 +88,11 @@ public class MainForm extends javax.swing.JFrame {
         uploadButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         uploadButton.setText("Upload Conteudo");
         uploadButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        uploadButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                uploadButtonActionPerformed(evt);
+            }
+        });
 
         friendsListButton.setBackground(new java.awt.Color(67, 104, 145));
         friendsListButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -324,58 +334,87 @@ public class MainForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void myContentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_myContentButtonActionPerformed
+    private void myContentButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                
         // TODO add your handling code here:
-    }//GEN-LAST:event_myContentButtonActionPerformed
-
-    private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        MediaCenter mn = MediaCenter.getInstance();
-       
-       if(mn.getEstado().equals("stop")){
-           mn.play();
-           //this.stopButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Pedro Gomes\\Desktop\\DSSMediaCenter\\src\\Views\\DssIcons\\Icons\\baseline_stop_black_18dp.png"));
-       
-       }else if(mn.getEstado().equals("play")){
-           mn.stop();
-           stopButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Views/baseline_play_arrow_black_18dp.png")));
-       }
-    }                                          
+    }                                                                                   
 
   
     
     public void loadUser(){
-        MediaCenter mn = MediaCenter.getInstance();
-        String nome = mn.getUser().getNome();
+        MediaCenter mc = MediaCenter.getInstance();
+        String nome = mc.getUser().getNome();
         this.utilizadorLabel.setText("Utilizador: "+nome);
-        //mn.readANDinit();
+        mc.readANDinit();
         updateMetaData();
     }
     
     
     public void updateMetaData(){
-       /* MediaCenter mn = MediaCenter.getInstance();
-        String[] prt = mn.getCurrentMusic();
-        this.musicNameLabel.setText(prt[1]);
-        this.compositorLabel.setText(prt[0]); */
-        
+        MediaCenter mc = MediaCenter.getInstance();
+        /*String[] prt = mc.getCurrentMusic();
+        if(prt != null){
+            this.musicNameLabel.setText(prt[1]);
+            this.compositorLabel.setText(prt[0]);
+        } */
     }
     
     
+    
+    private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
+       MediaCenter mc = MediaCenter.getInstance();
+       if(mc.getPlayListSize() == 0)return;
+       if(mc.getStatus() != PlayerStatus.PLAYING ){
+           mc.play();
+           this.stopButton.setIcon(new javax.swing.ImageIcon("src/Icons/baseline_stop_black_18dp.png"));
+       
+       }else {
+           mc.pause();
+           this.stopButton.setIcon(new javax.swing.ImageIcon("src/Icons/baseline_play_arrow_black_18dp.png"));
+       }
+       
+       
+    }//GEN-LAST:event_stopButtonActionPerformed
 
     private void skipFwdButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_skipFwdButtonActionPerformed
-        MediaCenter mn = MediaCenter.getInstance();
+        MediaCenter mc = MediaCenter.getInstance();
+        if(mc.getPlayListSize() == 0)return;
         stopButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Views/baseline_play_arrow_black_18dp.png")));
-       // mn.skip_next_song();
+        mc.skip_next_song();
         updateMetaData();
         
     }//GEN-LAST:event_skipFwdButtonActionPerformed
 
     private void skipBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_skipBackButtonActionPerformed
-        MediaCenter mn = MediaCenter.getInstance();
+        MediaCenter mc = MediaCenter.getInstance();
+        if(mc.getPlayListSize() == 0)return;
         stopButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Views/baseline_play_arrow_black_18dp.png")));
-        //mn.skip_previous_song();
+        mc.skip_previous_song();
         updateMetaData();
     }//GEN-LAST:event_skipBackButtonActionPerformed
+
+    
+    private void uploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadButtonActionPerformed
+        MediaCenter mc = MediaCenter.getInstance();
+        JFileChooser jfc = new JFileChooser();
+        if(jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+            File f = jfc.getSelectedFile();
+            
+            System.out.println();
+            try{    
+                Files.move(Paths.get(f.getPath()),Paths.get("Conteudo/" +f.getName())); 
+                mc.addFile(new File("Conteudo/"+f.getName()));
+                if(mc.getPlayListSize() == 1){
+                    this.updateMetaData();
+                }
+            
+            }catch(IOException e){
+                System.out.println("ERRO A COPIAR FICHEIRO");
+            }
+        }
+        
+     
+        
+    }//GEN-LAST:event_uploadButtonActionPerformed
 
     /**
      * @param args the command line arguments
