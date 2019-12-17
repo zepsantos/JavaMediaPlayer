@@ -6,14 +6,15 @@
 package Models;
 
 import DAO.UserDAO;
-import jaco.mp3.player.*;
 import java.util.ArrayList;
 import java.io.File; 
 import java.io.FileInputStream;
 import java.io.IOException;
+import javafx.embed.swing.JFXPanel;
 import org.farng.mp3.MP3File;
 import org.farng.mp3.TagException;
 import org.farng.mp3.id3.ID3v1;
+import javafx.scene.media.*;
 /**
  *
  * @author josepgrs
@@ -28,20 +29,20 @@ public class MediaCenter {
     private Conteudo currentlyContent;
     private int index = 0;
     private Thread musicThread;
-    private javax.media.Player player;
     //private javax.media.Player player;
     private int currentContentPos;
     private PlayerStatus playerStatus;
-    private MP3Player mp3Player;
+    private MediaPlayer mediaPlayer;
     
 
     public MediaCenter() {
+        
         this.userContentList = new ArrayList<>();
         this.playerStatus = PlayerStatus.STOP;
         this.currentContentPos = 0;
         currentlyLoggedInUser = null;
-        mp3Player = new MP3Player();
-        mp3Player.addMP3PlayerListener();
+        new JFXPanel();
+        
     }
     
     public void addFile(File file){
@@ -137,17 +138,19 @@ public class MediaCenter {
         if(currentlyContent == null) {
         currentlyContent = userContentList.get(index);
         if(currentlyContent == null) return;
-        addToQueueToPlay(new File("Conteudo/" + currentlyContent.getPath()));
+        File tmpFile = new File("Conteudo/" + currentlyContent.getPath());
+        mediaPlayer = new MediaPlayer(new Media(tmpFile.toURI().toString()));
         } 
-        mp3Player.play();
+        if(mediaPlayer != null) {
+        mediaPlayer.play();
         playerStatus = PlayerStatus.PLAYING;
+        }
+        
+        
         
     }
     
-    private void addToQueueToPlay(File file) {
-        mp3Player.addToPlayList(file);
-    }
-    
+   
 
     public void play(){
         reproduceMusic();
@@ -159,7 +162,7 @@ public class MediaCenter {
        //currentContentPos = player.getPosition();
         System.out.println(currentContentPos);
         try {
-            mp3Player.pause();
+            mediaPlayer.pause();
         } catch(Exception e) {
             System.out.println(e.getMessage());
         }
