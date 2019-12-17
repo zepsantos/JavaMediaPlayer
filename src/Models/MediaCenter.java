@@ -151,14 +151,12 @@ public class MediaCenter {
     }
     
     private void reproduceMusic() {
-        if(this.userContentList.isEmpty())return;
-        currentlyContent = userContentList.get(index);
-        
-        if(currentlyContent != null) {
+        if(currentlyContent == null) {
+            currentlyContent = userContentList.get(index);
+            if(currentlyContent == null) return;
             File tmpFile = new File("Conteudo/" + currentlyContent.getPath());
             setCurrentPlayer(new MediaPlayer(new Media(tmpFile.toURI().toString())));
-        }else return;
-        
+        } 
         if(currentPlayer != null) {
         currentPlayer.play();
         playerStatus = PlayerStatus.PLAYING;
@@ -215,7 +213,10 @@ public class MediaCenter {
             index = 0;
         }
         this.currentlyContent = this.userContentList.get(index);
-        //this.currenteFilePlaying = this.userContentList.get(index);
+        if(this.currentlyContent != null){
+            File tmpFile = new File("Conteudo/" + currentlyContent.getPath());
+            setCurrentPlayer(new MediaPlayer(new Media(tmpFile.toURI().toString())));
+        }
     
     }
     
@@ -230,6 +231,11 @@ public class MediaCenter {
             index = 0;
         }
         this.currentlyContent = this.userContentList.get(index);
+        if(this.currentlyContent != null){
+            File tmpFile = new File("Conteudo/" + currentlyContent.getPath());
+            setCurrentPlayer(new MediaPlayer(new Media(tmpFile.toURI().toString())));
+        }
+        
         
     }
     
