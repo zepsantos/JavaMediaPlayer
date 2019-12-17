@@ -28,8 +28,7 @@ public class Conteudo { //TODO ADICIONAR ALBUM
         this.path = path;
   
     }
-    
-    
+
     public int getId_conteudo() {
         return id_conteudo;
     }
@@ -46,6 +45,14 @@ public class Conteudo { //TODO ADICIONAR ALBUM
         this.nome = nome;
     }
 
+    public String getArtista() {
+        return artista;
+    }
+
+    public void setArtista(String artista) {
+        this.artista = artista;
+    }
+
     public String getCategoria() {
         return categoria;
     }
@@ -57,8 +64,8 @@ public class Conteudo { //TODO ADICIONAR ALBUM
     public String getPath() {
         return path;
     }
-    
-     public void setPath(String path) {
+
+    public void setPath(String path) {
         this.path = path;
     }
 
@@ -70,6 +77,8 @@ public class Conteudo { //TODO ADICIONAR ALBUM
         this.tamanho = tamanho;
     }
     
+    
+   
     
     
     
