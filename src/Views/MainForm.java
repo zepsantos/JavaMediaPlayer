@@ -403,7 +403,7 @@ public class MainForm extends javax.swing.JFrame {
             System.out.println();
             try{    
                 Files.move(Paths.get(f.getPath()),Paths.get("Conteudo/" +f.getName())); 
-                mc.addFile(new File("Conteudo/"+f.getName()));
+                mc.addFile(f.getName());
                 if(mc.getPlayListSize() == 1){
                     this.updateMetaData();
                 }

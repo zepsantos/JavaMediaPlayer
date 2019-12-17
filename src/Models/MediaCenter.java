@@ -5,23 +5,13 @@
  */
 package Models;
 
-import DAO.ConteudoDAO;
-import DAO.UserDAO;
+import DAO.*;
 import java.util.ArrayList;
 import java.io.File; 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.*;
-import javazoom.jl.player.advanced.AdvancedPlayer;
-import javazoom.jl.player.advanced.PlaybackListener;
 import org.farng.mp3.MP3File;
 import org.farng.mp3.TagException;
 import org.farng.mp3.id3.ID3v1;
@@ -37,7 +27,7 @@ public class MediaCenter {
     //private File currenteFilePlaying = null;
     private ArrayList<Conteudo> userContentList;
     private Conteudo currentlyContent;
-    private int index = 0;
+    private int index;
     private Thread musicThread;
     private Player player;
     private int currentMusicPos;
@@ -49,15 +39,30 @@ public class MediaCenter {
         this.userContentList = new ArrayList<>();
         this.musicPlaying = PlayerStatus.STOP;
         this.currentMusicPos = 0;
+        this.index = 0;
         currentlyLoggedInUser = null;
     }
     
-    public void addFile(File file){
+    public void addFile(String fName){
         
-        //ConteudoDAO ct = ConteudoDAO.getInstance();
-        //this.userContentList.add(file);
-  
+        ConteudoDAO ct = ConteudoDAO.getInstance();
+        Conteudo content;
        
+        try {
+            MP3File tmp = new MP3File(new File("Conteudo/" + fName));
+            if (tmp.hasID3v1Tag()) {
+                ID3v1 id3v1Tag = tmp.getID3v1Tag();
+                content = new Conteudo(id3v1Tag.getTitle(), id3v1Tag.getArtist(),id3v1Tag.getSongGenre(),fName);
+                this.userContentList.add(content);
+            }
+            }catch (IOException e) {
+                
+                System.out.println(e.getMessage());
+            }catch(TagException j){
+                
+                System.out.println(j.getMessage());
+            }
+ 
     }
     
     
@@ -108,18 +113,18 @@ public class MediaCenter {
         File f = new File("Conteudo/");
         pathnames = f.list();
         if(pathnames != null) {    
-        for(String path : pathnames){
-            //File tmp = new File("Conteudo/" + s));
-            try {
-                Conteudo tmp = getTagAndCreateContent(path);
-                if(tmp != null)
-                this.userContentList.add(tmp);
-            } catch (TagException e) {
-                //TODO: FAZER ALGUMA COISA QUANDO AS MUSICAS NAO TEM INFO, GUARDAR NOME FICHEIRO E REPRODUZIR
-            }
+            for(String path : pathnames){
+                System.out.println(path);
+                try {
+                    Conteudo tmp = getTagAndCreateContent(path);
+                    if(tmp != null)
+                    this.userContentList.add(tmp);
+                } catch (TagException e) {
+                    //TODO: FAZER ALGUMA COISA QUANDO AS MUSICAS NAO TEM INFO, GUARDAR NOME FICHEIRO E REPRODUZIR
+                }
       
-            //this.userContentList.add(new File("Conteudo/"+s));
-        }         
+                //this.userContentList.add(new File("Conteudo/"+s));
+            }         
         }
     }
     
@@ -129,7 +134,7 @@ public class MediaCenter {
                 MP3File tmp = new MP3File(new File("Conteudo/" + path));
                 if (tmp.hasID3v1Tag()) {
                     ID3v1 id3v1Tag = tmp.getID3v1Tag();
-                    content = new Conteudo(0, id3v1Tag.getTitle(), id3v1Tag.getArtist(),"teste",path);
+                    content = new Conteudo(id3v1Tag.getTitle(), id3v1Tag.getArtist(),"teste",path);
                 }
             }catch (IOException e) {
                 System.out.println(e.getMessage());
@@ -150,7 +155,7 @@ public class MediaCenter {
         if(currentlyContent == null) return;
         try {
                 File tmp = new File("Conteudo/" + currentlyContent.getPath());
-                System.out.println(tmp.length());
+                //System.out.println(tmp.length());
                 FileInputStream source = new FileInputStream(tmp);
                 player = new Player(source);
                 startMusicPlaying();   
@@ -188,7 +193,7 @@ public class MediaCenter {
     
     public void pause(){
         currentMusicPos = player.getPosition();
-        System.out.println(currentMusicPos);
+        //System.out.println(currentMusicPos);
         try {
             player.close();
         } catch(Exception e) {
@@ -214,6 +219,7 @@ public class MediaCenter {
     
     public void skip_next_song(){
         pause();
+        System.out.println(this.userContentList.size());
         if(this.userContentList.size() == 0)return;
         
         if(this.userContentList.size() > index + 1){

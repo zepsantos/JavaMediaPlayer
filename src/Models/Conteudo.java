@@ -14,7 +14,6 @@ public class Conteudo { //TODO ADICIONAR ALBUM
     private int id_conteudo;
     private String artista;
     private String nome;
-    private String artista;
     private String categoria;
     private String path;
     private int tamanho; //TODO: REVER ISTO
@@ -22,6 +21,16 @@ public class Conteudo { //TODO ADICIONAR ALBUM
 
     public Conteudo(int id,String name,String artista,String cat,String path){
         this.id_conteudo = id;
+        this.nome = name;
+        this.artista = artista;
+        this.categoria = cat;
+        this.tamanho = 0;
+        this.path = path;
+  
+    }
+    
+    public Conteudo(String name,String artista,String cat,String path){
+        this.id_conteudo = -1;
         this.nome = name;
         this.artista = artista;
         this.categoria = cat;
