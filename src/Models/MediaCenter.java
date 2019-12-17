@@ -32,7 +32,7 @@ public class MediaCenter {
     //private javax.media.Player player;
     private int currentContentPos;
     private PlayerStatus playerStatus;
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer currentPlayer;
     
 
     public MediaCenter() {
@@ -139,14 +139,30 @@ public class MediaCenter {
         currentlyContent = userContentList.get(index);
         if(currentlyContent == null) return;
         File tmpFile = new File("Conteudo/" + currentlyContent.getPath());
-        mediaPlayer = new MediaPlayer(new Media(tmpFile.toURI().toString()));
+        setCurrentPlayer(new MediaPlayer(new Media(tmpFile.toURI().toString())));
         } 
-        if(mediaPlayer != null) {
-        mediaPlayer.play();
+        if(currentPlayer != null) {
+        currentPlayer.play();
         playerStatus = PlayerStatus.PLAYING;
         }
         
         
+        
+    }
+    
+    private void setCurrentPlayer(final MediaPlayer player) {
+        currentPlayer = player;
+        currentPlayer.setOnEndOfMedia(() -> {
+                
+                if(++index < userContentList.size()) {
+                    currentlyContent = userContentList.get(index);
+                    File tmp = new File("Conteudo/"+ currentlyContent.getPath());
+                Media media = new Media(tmp.toURI().toString());
+		setCurrentPlayer(new MediaPlayer(media));
+		currentPlayer.play();
+                }
+		
+	});
         
     }
     
@@ -162,7 +178,7 @@ public class MediaCenter {
        //currentContentPos = player.getPosition();
         System.out.println(currentContentPos);
         try {
-            mediaPlayer.pause();
+            currentPlayer.pause();
         } catch(Exception e) {
             System.out.println(e.getMessage());
         }
