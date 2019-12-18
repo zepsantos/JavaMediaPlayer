@@ -6,15 +6,19 @@
 package Models;
 
 import DAO.UserDAO;
+import Views.backgroundUpdater;
 import java.util.ArrayList;
 import java.io.File; 
 import java.io.FileInputStream;
 import java.io.IOException;
 import javafx.embed.swing.JFXPanel;
+import javafx.scene.control.ProgressBar;
 import org.farng.mp3.MP3File;
 import org.farng.mp3.TagException;
 import org.farng.mp3.id3.ID3v1;
 import javafx.scene.media.*;
+import javafx.util.Duration;
+import javax.swing.JProgressBar;
 /**
  *
  * @author josepgrs
@@ -26,11 +30,8 @@ public class MediaCenter {
     
     //private File currenteFilePlaying = null;
     private ArrayList<Conteudo> userContentList;
-    private Conteudo currentlyContent;
+    private Conteudo currentContent;
     private int index = 0;
-    private Thread musicThread;
-    //private javax.media.Player player;
-    private int currentContentPos;
     private PlayerStatus playerStatus;
     private MediaPlayer currentPlayer;
     
@@ -39,7 +40,6 @@ public class MediaCenter {
         
         this.userContentList = new ArrayList<>();
         this.playerStatus = PlayerStatus.STOP;
-        this.currentContentPos = 0;
         currentlyLoggedInUser = null;
         new JFXPanel();
         
@@ -84,8 +84,7 @@ public class MediaCenter {
     }
     
     public Conteudo getCurrentContent(){
-        if(this.userContentList.size() == 0)return null;
-        return this.userContentList.get(index);
+        return currentContent;
     }
     
     public int getPlayListSize(){
@@ -135,13 +134,14 @@ public class MediaCenter {
     }
     
     private void reproduceMusic() {
-        if(currentlyContent == null) {
-        currentlyContent = userContentList.get(index);
-        if(currentlyContent == null) return;
-        File tmpFile = new File("Conteudo/" + currentlyContent.getPath());
+        if(currentContent == null) {
+        currentContent = userContentList.get(index);
+        if(currentContent == null) return;
+        File tmpFile = new File("Conteudo/" + currentContent.getPath());
         setCurrentPlayer(new MediaPlayer(new Media(tmpFile.toURI().toString())));
         } 
         if(currentPlayer != null) {
+        
         currentPlayer.play();
         playerStatus = PlayerStatus.PLAYING;
         }
@@ -150,13 +150,20 @@ public class MediaCenter {
         
     }
     
+    
+    public int getMusicProgress() {
+        int res = 0;
+        res = (int) Math.round((currentPlayer.getCurrentTime().toMillis()/currentPlayer.getTotalDuration().toMillis()) * 100);
+        return res;
+    }
+    
     private void setCurrentPlayer(final MediaPlayer player) {
         currentPlayer = player;
         currentPlayer.setOnEndOfMedia(() -> {
                 
                 if(++index < userContentList.size()) {
-                    currentlyContent = userContentList.get(index);
-                    File tmp = new File("Conteudo/"+ currentlyContent.getPath());
+                    currentContent = userContentList.get(index);
+                    File tmp = new File("Conteudo/"+ currentContent.getPath());
                 Media media = new Media(tmp.toURI().toString());
 		setCurrentPlayer(new MediaPlayer(media));
 		currentPlayer.play();
@@ -174,9 +181,10 @@ public class MediaCenter {
     }
     
     
+    
+    
     public void pause(){
        //currentContentPos = player.getPosition();
-        System.out.println(currentContentPos);
         try {
             currentPlayer.pause();
         } catch(Exception e) {
@@ -214,6 +222,8 @@ public class MediaCenter {
     
     
     
-    
+    public MediaPlayer getMediaPlayer() {
+        return this.currentPlayer;
+    }
     
 }

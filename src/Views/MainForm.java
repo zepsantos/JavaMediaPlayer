@@ -14,6 +14,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JTable;
 
 /**
  *
@@ -28,8 +31,7 @@ public class MainForm extends javax.swing.JFrame {
         
         initComponents();
         loadUser();
-        new backgroundUpdater(progressBar).execute();
-        
+        //drawPlaylistSection();
     }
 
     /**
@@ -268,7 +270,6 @@ public class MainForm extends javax.swing.JFrame {
         progressBar.setBackground(new java.awt.Color(230, 230, 230));
         progressBar.setForeground(new java.awt.Color(47, 72, 100));
         progressBar.setToolTipText("");
-        progressBar.setValue(50);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -348,7 +349,7 @@ public class MainForm extends javax.swing.JFrame {
 
   
     
-    public void loadUser(){
+    private void loadUser(){
         MediaCenter mc = MediaCenter.getInstance();
         String nome = mc.getUser().getNome();
         this.utilizadorLabel.setText("Utilizador: "+nome);
@@ -371,6 +372,47 @@ public class MainForm extends javax.swing.JFrame {
         } */
     }
     
+    private void updateProgressBar() {
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                while(true) {
+                    new backgroundUpdater(progressBar).execute();
+                    try {
+                        Thread.sleep(1500);
+                    } catch(InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        Thread t = new Thread(r);
+        t.start();
+    } 
+    
+    
+    private void drawPlaylistSection() {
+         String[] columnNames = {"First Name",
+                        "Last Name",
+                        "Sport",
+                        "# of Years",
+                        "Vegetarian"};
+         Object[][] data = {
+    {"Kathy", "Smith",
+     "Snowboarding", new Integer(5), new Boolean(false)},
+    {"John", "Doe",
+     "Rowing", new Integer(3), new Boolean(true)},
+    {"Sue", "Black",
+     "Knitting", new Integer(2), new Boolean(false)},
+    {"Jane", "White",
+     "Speed reading", new Integer(20), new Boolean(true)},
+    {"Joe", "Brown",
+     "Pool", new Integer(10), new Boolean(false)}
+};
+        javax.swing.JTable table = new JTable(data,columnNames);
+        musicPannel.add(table);
+    }
+    
     
     
     private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
@@ -378,6 +420,7 @@ public class MainForm extends javax.swing.JFrame {
        if(mc.getPlayListSize() == 0)return;
        if(mc.getStatus() != PlayerStatus.PLAYING ){
            mc.play();
+           updateProgressBar();
            this.stopButton.setIcon(new javax.swing.ImageIcon("src/Icons/baseline_stop_black_18dp.png"));
        
        }else {

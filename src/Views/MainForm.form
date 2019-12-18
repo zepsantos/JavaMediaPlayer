@@ -457,7 +457,6 @@
               <Color blue="64" green="48" red="2f" type="rgb"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value=""/>
-            <Property name="value" type="int" value="50"/>
           </Properties>
         </Component>
       </SubComponents>

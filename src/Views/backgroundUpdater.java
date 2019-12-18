@@ -14,7 +14,7 @@ import javax.swing.SwingWorker;
  *
  * @author josepgrs
  */
-public class backgroundUpdater extends SwingWorker<Void, Void> {
+public class backgroundUpdater extends SwingWorker<Void, Integer> {
     private MediaCenter mc ;
     private javax.swing.JProgressBar progressBar;
     private int statusPB = 0;
@@ -28,14 +28,15 @@ public class backgroundUpdater extends SwingWorker<Void, Void> {
 
     @Override
     protected Void doInBackground() throws Exception {
-               // if()
+                statusPB = mc.getMusicProgress();
+                publish(statusPB);
                 return null;
             }
 
     @Override
-    protected void process(List<Void> chunks) {
+    protected void process(List<Integer> chunks) {
         super.process(chunks); 
-       // progressBar.setValue(i);
+        progressBar.setValue(chunks.get(chunks.size()-1).intValue());
         
     }
 
