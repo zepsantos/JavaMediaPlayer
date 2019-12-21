@@ -5,25 +5,35 @@
  */
 package Views;
 
-import Models.Conteudo;
+import Models.Content;
+import Models.MusicContent;
 import Models.MediaCenter;
 import Models.PlayerStatus;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import javafx.util.Duration;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Pedro Gomes
  */
 public class MainForm extends javax.swing.JFrame {
-    int i = 0;
+    int musicShownPlaylist = 0;
+    int progressStatus = 0;
     /**
      * Creates new form MainMenu
      */
@@ -31,7 +41,8 @@ public class MainForm extends javax.swing.JFrame {
         
         initComponents();
         loadUser();
-        //drawPlaylistSection();
+        drawPlaylistSection();
+        listenForClicksOnProgressBar();
     }
 
     /**
@@ -51,13 +62,8 @@ public class MainForm extends javax.swing.JFrame {
         friendsListButton = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
-        tituloLabel = new javax.swing.JLabel();
-        artistaLabel = new javax.swing.JLabel();
-        albumLabel = new javax.swing.JLabel();
-        tempoLabel = new javax.swing.JLabel();
-        categoriaLabel = new javax.swing.JLabel();
-        musicPannel = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        musicTable = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         musicNameLabel = new javax.swing.JLabel();
         compositorLabel = new javax.swing.JLabel();
@@ -138,80 +144,45 @@ public class MainForm extends javax.swing.JFrame {
 
         jPanel4.setBackground(new java.awt.Color(54, 82, 114));
 
-        tituloLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tituloLabel.setText("Titulo");
+        musicTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+            },
+            new String [] {
+                "Nome", "Artista", "Categoria", "Duracao"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
 
-        artistaLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        artistaLabel.setText("Artista");
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
-        albumLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        albumLabel.setText("Album");
-
-        tempoLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tempoLabel.setText("Tempo");
-
-        categoriaLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        categoriaLabel.setText("Categoria");
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tituloLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(artistaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(albumLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tempoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(categoriaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(tituloLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(artistaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(albumLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(tempoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(categoriaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
-        musicPannel.setBackground(new java.awt.Color(47, 72, 100));
-
-        javax.swing.GroupLayout musicPannelLayout = new javax.swing.GroupLayout(musicPannel);
-        musicPannel.setLayout(musicPannelLayout);
-        musicPannelLayout.setHorizontalGroup(
-            musicPannelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 859, Short.MAX_VALUE)
-        );
-        musicPannelLayout.setVerticalGroup(
-            musicPannelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 474, Short.MAX_VALUE)
-        );
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(musicTable);
+        if (musicTable.getColumnModel().getColumnCount() > 0) {
+            musicTable.getColumnModel().getColumn(0).setResizable(false);
+            musicTable.getColumnModel().getColumn(1).setResizable(false);
+            musicTable.getColumnModel().getColumn(2).setResizable(false);
+            musicTable.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(musicPannel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 871, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(musicPannel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -269,6 +240,7 @@ public class MainForm extends javax.swing.JFrame {
 
         progressBar.setBackground(new java.awt.Color(230, 230, 230));
         progressBar.setForeground(new java.awt.Color(47, 72, 100));
+        progressBar.setMaximum(1000);
         progressBar.setToolTipText("");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -345,7 +317,39 @@ public class MainForm extends javax.swing.JFrame {
 
     private void myContentButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                
         // TODO add your handling code here:
-    }                                                                                   
+    }                                                      
+    
+    private void listenForClicksOnProgressBar() {
+        progressBar.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                MediaCenter mc = MediaCenter.getInstance();
+                double dx = e.getX();
+                double dwidth = progressBar.getWidth();
+                double progression = (dx / dwidth);
+                int milliseconds =(int) (progression * mc.getCurrentContent().getTamanho().toMillis());
+                Duration duration = new Duration(milliseconds);
+                mc.skip_to_time(duration);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                           }
+        });
+    }
 
   
     
@@ -360,31 +364,28 @@ public class MainForm extends javax.swing.JFrame {
     
     public void updateMetaData(){
         MediaCenter mc = MediaCenter.getInstance();
-        Conteudo tmp = mc.getCurrentContent();
-        if(tmp != null) {
+        Content tmp = mc.getCurrentContent();
+        if(tmp != null && (tmp instanceof MusicContent)) {
             this.musicNameLabel.setText(tmp.getNome());
-            this.compositorLabel.setText(tmp.getArtista());
+            this.compositorLabel.setText(((MusicContent)tmp).getArtista());
         }
-        /*String[] prt = mc.getCurrentMusic();
-        if(prt != null){
-            this.musicNameLabel.setText(prt[1]);
-            this.compositorLabel.setText(prt[0]);
-        } */
     }
     
     private void updateProgressBar() {
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                while(true) {
-                    new backgroundUpdater(progressBar).execute();
-                    try {
-                        Thread.sleep(1500);
-                    } catch(InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
+        MediaCenter mc = MediaCenter.getInstance();
+        Content tmp = mc.getCurrentContent() ;
+        int tmppd = 0;
+            tmppd = (int)(tmp.getTamanho().toMillis());
+            progressBar.setMaximum(tmppd);
+
+        
+        final int pd = tmppd;
+        Runnable r = () -> {
+            while(MediaCenter.getInstance().getStatus() == PlayerStatus.PLAYING) {
+                progressBar.setValue((int)mc.getMusicProgress());
+                
             }
+            
         };
         Thread t = new Thread(r);
         t.start();
@@ -392,42 +393,87 @@ public class MainForm extends javax.swing.JFrame {
     
     
     private void drawPlaylistSection() {
-         String[] columnNames = {"First Name",
-                        "Last Name",
-                        "Sport",
-                        "# of Years",
-                        "Vegetarian"};
-         Object[][] data = {
-    {"Kathy", "Smith",
-     "Snowboarding", new Integer(5), new Boolean(false)},
-    {"John", "Doe",
-     "Rowing", new Integer(3), new Boolean(true)},
-    {"Sue", "Black",
-     "Knitting", new Integer(2), new Boolean(false)},
-    {"Jane", "White",
-     "Speed reading", new Integer(20), new Boolean(true)},
-    {"Joe", "Brown",
-     "Pool", new Integer(10), new Boolean(false)}
-};
-        javax.swing.JTable table = new JTable(data,columnNames);
-        musicPannel.add(table);
+        int i = 0;
+        String[] columnNames = {"Nome", "Artista", "Categoria", "Duracao" };
+        DefaultTableModel model = (DefaultTableModel) musicTable.getModel();
+        List<List<String>> tmp = playlistToTable();
+        for(List<String> tableData : tmp) {
+            if(i>=musicShownPlaylist) {
+            musicShownPlaylist++;
+            model.addRow(tableData.stream().toArray());
+            }
+            i++;
+        }
+        MediaCenter mc = MediaCenter.getInstance();
+        musicTable.addMouseListener(new MouseAdapter() {
+             @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    int row = musicTable.rowAtPoint(evt.getPoint());
+                    if(row>=0) {
+                        mc.stopPlayer();
+                        mc.play(row);
+                        updateMusicInfo();
+                        changeIconMusicStatus();
+                    }
+
+        }
+        });
+    } 
+    
+    private List<List<String>> playlistToTable() {
+        List<Content> tmp = MediaCenter.getInstance().getUserContentList();
+        List<List<String>> tmpList = new ArrayList<>();
+        for(Content c : tmp) {
+            if(c instanceof MusicContent) {
+                MusicContent cmc = (MusicContent) c;
+            List<String> stringList = new ArrayList<>();
+            stringList.add(cmc.getNome());
+            stringList.add(cmc.getArtista());
+            stringList.add(String.valueOf(cmc.getCategoria()));
+            stringList.add(DurationToGoodLookingString(cmc.getTamanho()));
+            tmpList.add(stringList);
+            }
+        }
+        return tmpList;
+        
     }
     
+    private String DurationToGoodLookingString(Duration d) {
+        double milis  = d.toMillis();
+        int minutes =(int) (milis/1000) / 60;
+        int seconds = (int) (milis/1000) % 60;
+        StringBuilder sb = new StringBuilder(String.valueOf(minutes));
+        sb.append(":");
+        sb.append(String.valueOf(seconds));
+        return sb.toString();
+        
+        
+    }
     
+    private void updateMusicInfo() {
+           updateMetaData();
+           updateProgressBar();
+    }
+    
+    private void changeIconMusicStatus() {
+        MediaCenter mc = MediaCenter.getInstance();
+        if(mc.getStatus() == PlayerStatus.PLAYING)
+        this.stopButton.setIcon(new javax.swing.ImageIcon("src/Icons/baseline_stop_black_18dp.png"));
+        else
+        this.stopButton.setIcon(new javax.swing.ImageIcon("src/Icons/baseline_play_arrow_black_18dp.png"));
+
+    }
     
     private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
        MediaCenter mc = MediaCenter.getInstance();
        if(mc.getPlayListSize() == 0)return;
        if(mc.getStatus() != PlayerStatus.PLAYING ){
            mc.play();
-           updateProgressBar();
-           this.stopButton.setIcon(new javax.swing.ImageIcon("src/Icons/baseline_stop_black_18dp.png"));
-       
+           updateMusicInfo();
        }else {
            mc.pause();
-           this.stopButton.setIcon(new javax.swing.ImageIcon("src/Icons/baseline_play_arrow_black_18dp.png"));
        }
-       
+       changeIconMusicStatus();
        
     }//GEN-LAST:event_stopButtonActionPerformed
 
@@ -450,18 +496,19 @@ public class MainForm extends javax.swing.JFrame {
 
     
     private void uploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadButtonActionPerformed
+        //new UploadForm().setVisible(true);
         MediaCenter mc = MediaCenter.getInstance();
         JFileChooser jfc = new JFileChooser();
         if(jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
             File f = jfc.getSelectedFile();
-            
-            System.out.println();
             try{    
-                Files.move(Paths.get(f.getPath()),Paths.get("Conteudo/" +f.getName())); 
-                mc.addFile(new File("Conteudo/"+f.getName()));
+                Files.copy(Paths.get(f.getPath()),Paths.get("Conteudo/" +f.getName())); 
+                mc.addFile(f.getName());
+                drawPlaylistSection();
                 if(mc.getPlayListSize() == 1){
                     this.updateMetaData();
                 }
+                
             
             }catch(IOException e){
                 System.out.println("ERRO A COPIAR FICHEIRO");
@@ -509,9 +556,6 @@ public class MainForm extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel albumLabel;
-    private javax.swing.JLabel artistaLabel;
-    private javax.swing.JLabel categoriaLabel;
     private javax.swing.JLabel compositorLabel;
     private javax.swing.JButton downloadButton;
     private javax.swing.JButton friendsListButton;
@@ -519,17 +563,15 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel musicNameLabel;
-    private javax.swing.JPanel musicPannel;
+    private javax.swing.JTable musicTable;
     private javax.swing.JButton myContentButton;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JButton skipBackButton;
     private javax.swing.JButton skipFwdButton;
     private javax.swing.JButton soundVolumeButton;
     private javax.swing.JButton stopButton;
-    private javax.swing.JLabel tempoLabel;
-    private javax.swing.JLabel tituloLabel;
     private javax.swing.JButton uploadButton;
     private javax.swing.JLabel utilizadorLabel;
     // End of variables declaration//GEN-END:variables

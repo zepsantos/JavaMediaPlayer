@@ -14,10 +14,10 @@ import javax.swing.SwingWorker;
  *
  * @author josepgrs
  */
-public class backgroundUpdater extends SwingWorker<Void, Integer> {
+public class backgroundUpdater extends SwingWorker<Void, Double> {
     private MediaCenter mc ;
     private javax.swing.JProgressBar progressBar;
-    private int statusPB = 0;
+    private double statusPB = 0;
 
     public backgroundUpdater(JProgressBar progressBar) {
         this.progressBar = progressBar;
@@ -34,9 +34,9 @@ public class backgroundUpdater extends SwingWorker<Void, Integer> {
             }
 
     @Override
-    protected void process(List<Integer> chunks) {
+    protected void process(List<Double> chunks) {
         super.process(chunks); 
-        progressBar.setValue(chunks.get(chunks.size()-1).intValue());
+        progressBar.setValue((int) chunks.get(chunks.size()-1).doubleValue());
         
     }
 

@@ -59,7 +59,7 @@ public class UserDAO implements Map<String,User> {
             String sql = "SELECT * FROM Users WHERE email='"+(String)key+"'";
             ResultSet rs = st.executeQuery(sql);
             while(rs.next()) {
-                tmp = new User(rs.getString(2),rs.getString(3));
+                tmp = new User(rs.getString(2),rs.getString(3),rs.getInt(1),rs.getString(4));
             }
         }
         catch (SQLException e) {

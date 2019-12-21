@@ -11,11 +11,14 @@ package Models;
  */
 public class User {
     private String email,nome,password;
+    private int userID;
+
     
-    public User(String email, String password) {
+    public User(String email, String password,int id,String nome) {
         this.email = email;
         this.password = password;
-        
+        this.nome = nome;
+        this.userID = id;
     }
 
     public String getEmail() {
@@ -35,4 +38,21 @@ public class User {
    public String getNome(){
         return this.nome;
    }
+   
+   public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+    
 }
