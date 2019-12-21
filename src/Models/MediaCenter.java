@@ -76,6 +76,7 @@ public class MediaCenter {
     
     private MusicContent getTagAndCreateContent(String path) {
         MusicContent content = null;
+        
         try {
             File tmpFile = new File("Conteudo/" + path);
             MP3File tmp = new MP3File(tmpFile);
@@ -92,7 +93,6 @@ public class MediaCenter {
                 content = new MusicContent(id3v1Tag.getTitle(), id3v1Tag.getArtist(),-1,path,media.getDuration());
             }
             }catch(TagException | IOException j){
-                
                 System.out.println(j.getMessage()); //TODO: QUANDO NAO TEM TAGS FAZER ALGUMA COISA
             }
         return content;

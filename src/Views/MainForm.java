@@ -20,13 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.util.Duration;
 import javax.swing.JFileChooser;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JTable;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
-
 /**
  *
  * @author Pedro Gomes
@@ -43,6 +38,7 @@ public class MainForm extends javax.swing.JFrame {
         loadUser();
         drawPlaylistSection();
         listenForClicksOnProgressBar();
+        cleanLook();
     }
 
     /**
@@ -56,10 +52,11 @@ public class MainForm extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         utilizadorLabel = new javax.swing.JLabel();
-        myContentButton = new javax.swing.JButton();
+        myMusicButton = new javax.swing.JButton();
         downloadButton = new javax.swing.JButton();
         uploadButton = new javax.swing.JButton();
         friendsListButton = new javax.swing.JButton();
+        myMediaButton = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -80,13 +77,14 @@ public class MainForm extends javax.swing.JFrame {
         utilizadorLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         utilizadorLabel.setText("Utilizador:");
 
-        myContentButton.setBackground(new java.awt.Color(67, 104, 145));
-        myContentButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        myContentButton.setText("Meu Conteudo");
-        myContentButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        myContentButton.addActionListener(new java.awt.event.ActionListener() {
+        myMusicButton.setBackground(new java.awt.Color(67, 104, 145));
+        myMusicButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        myMusicButton.setText("Minhas Musicas");
+        myMusicButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        myMusicButton.setName(""); // NOI18N
+        myMusicButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                myContentButtonActionPerformed(evt);
+                myMusicButtonActionPerformed(evt);
             }
         });
 
@@ -110,6 +108,11 @@ public class MainForm extends javax.swing.JFrame {
         friendsListButton.setText("Ver lista de amigos");
         friendsListButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
+        myMediaButton.setBackground(new java.awt.Color(67, 104, 145));
+        myMediaButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        myMediaButton.setText("Meus Videos");
+        myMediaButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -120,20 +123,23 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(downloadButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(utilizadorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(uploadButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(myContentButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(friendsListButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(myMusicButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(friendsListButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(myMediaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(75, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(56, 56, 56)
-                .addComponent(myContentButton)
+                .addComponent(myMusicButton)
                 .addGap(34, 34, 34)
+                .addComponent(myMediaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42)
                 .addComponent(downloadButton)
-                .addGap(38, 38, 38)
+                .addGap(33, 33, 33)
                 .addComponent(uploadButton)
-                .addGap(40, 40, 40)
+                .addGap(33, 33, 33)
                 .addComponent(friendsListButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(utilizadorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -192,7 +198,7 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -315,6 +321,34 @@ public class MainForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cleanLook(){
+        try { 
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
+        }catch (Exception ex) { 
+            ex.printStackTrace(); 
+        }
+        this.myMusicButton.setOpaque(false);
+        this.myMusicButton.setContentAreaFilled(false);
+        this.myMusicButton.setBorderPainted(false);
+        
+        this.myMediaButton.setOpaque(false);
+        this.myMediaButton.setContentAreaFilled(false);
+        this.myMediaButton.setBorderPainted(false);
+        
+        this.downloadButton.setOpaque(false);
+        this.downloadButton.setContentAreaFilled(false);
+        this.downloadButton.setBorderPainted(false);
+        
+        this.uploadButton.setOpaque(false);
+        this.uploadButton.setContentAreaFilled(false);
+        this.uploadButton.setBorderPainted(false);
+                
+        this.friendsListButton.setOpaque(false);
+        this.friendsListButton.setContentAreaFilled(false);
+        this.friendsListButton.setBorderPainted(false);
+    }
+    
     private void myContentButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                
         // TODO add your handling code here:
     }                                                      
@@ -513,12 +547,13 @@ public class MainForm extends javax.swing.JFrame {
             }catch(IOException e){
                 System.out.println("ERRO A COPIAR FICHEIRO");
             }
-        }
-        
-     
-        
+        } 
     }//GEN-LAST:event_uploadButtonActionPerformed
-
+    
+    private void myMusicButtonActionPerformed(java.awt.event.ActionEvent evt){
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -546,7 +581,7 @@ public class MainForm extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -566,7 +601,8 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel musicNameLabel;
     private javax.swing.JTable musicTable;
-    private javax.swing.JButton myContentButton;
+    private javax.swing.JButton myMediaButton;
+    private javax.swing.JButton myMusicButton;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JButton skipBackButton;
     private javax.swing.JButton skipFwdButton;
