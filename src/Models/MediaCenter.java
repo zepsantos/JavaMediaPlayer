@@ -83,7 +83,9 @@ public class MediaCenter {
                 ID3v1 id3v1Tag = tmp.getID3v1Tag();
                 Media media = new Media(tmpFile.toURI().toString());
                 MediaPlayer tmpMedia = new MediaPlayer(media);
-                while(tmpMedia.getStatus() != MediaPlayer.Status.READY);
+                while(tmpMedia.getStatus() != MediaPlayer.Status.READY){
+                    System.out.println(1);
+                }
                 content = new MusicContent(id3v1Tag.getTitle(), id3v1Tag.getArtist(),-1,path,media.getDuration());
             }
             }catch(TagException | IOException j){

@@ -438,17 +438,22 @@ public class MainForm extends javax.swing.JFrame {
             }
             i++;
         }
+
         MediaCenter mc = MediaCenter.getInstance();
         musicTable.addMouseListener(new MouseAdapter() {
              @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    int column = musicTable.columnAtPoint(evt.getPoint());
                     int row = musicTable.rowAtPoint(evt.getPoint());
-                    if(row>=0) {
+                    if(column == 2) {
+                        System.out.println("2");
+                    }else if(row>=0) {
                         mc.stopPlayer();
                         mc.play(row);
                         updateMusicInfo();
                         changeIconMusicStatus();
                     }
+                    
 
         }
         });
