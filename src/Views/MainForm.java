@@ -443,6 +443,10 @@ public class MainForm extends javax.swing.JFrame {
              @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                     int row = musicTable.rowAtPoint(evt.getPoint());
+                    int column = musicTable.columnAtPoint(evt.getPoint());
+                    if(column == 2) {
+                        
+                    }
                     if(row>=0) {
                         mc.stopPlayer();
                         mc.play(row);
