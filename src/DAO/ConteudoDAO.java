@@ -88,7 +88,6 @@ public class ConteudoDAO implements Map<String,Content> {
     }
     
     public MusicContent putMusicContent(String k, MusicContent v) {
-
         try (Connection con = DriverManager.getConnection(urlDatabase)) {
             //create the statement
             Statement st = con.createStatement();
@@ -105,12 +104,13 @@ public class ConteudoDAO implements Map<String,Content> {
             sql.append(",");
             sql.append(MediaCenter.getInstance().getUser().getUserID());
             sql.append(");");
+            System.out.println(sql.toString());
             st.executeUpdate(sql.toString());
             
         }
         catch (SQLException e) {
             // Erro ao estabelecer a ligação
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return v;
     }
