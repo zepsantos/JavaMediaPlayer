@@ -37,6 +37,8 @@ public class MediaCenter {
     
     private ArrayList<Content> userMusicContentList;
     private ArrayList<VideoContent> userVideoContentList;
+    private ArrayList<Content> allMusicContentList;
+    private ArrayList<Content> allVideoContentList;
     private Content currentContent;
     private int index = 0;
     private int currentContentPos;
@@ -48,6 +50,8 @@ public class MediaCenter {
         
         this.userMusicContentList = new ArrayList<>();
         this.userVideoContentList = new ArrayList<>();
+        this.allMusicContentList = new ArrayList<>();
+        this.allVideoContentList = new ArrayList<>();
         this.playerStatus = PlayerStatus.STOP;
         currentlyLoggedInUser = null;
         new JFXPanel();
@@ -97,6 +101,9 @@ public class MediaCenter {
             } else {
                 //TODO JA EXISTE NA DB
                 System.out.println("Ja existe o ficheiro adicionado");
+                if(ct.getOwner(content) != getUser().getUserID()) {
+                    ct.putRepeatedContent(content);
+                }
             }
         }
        
@@ -104,6 +111,7 @@ public class MediaCenter {
     }
     
     
+    @SuppressWarnings("empty-statement")
     private MusicContent getTagAndCreateContent(String path) {
         MusicContent content = null;
         
@@ -169,8 +177,10 @@ public class MediaCenter {
     }
     
     public void readPlaylist() {
-        this.userMusicContentList = new ArrayList<>(ConteudoDAO.getInstance().values());
-        this.userVideoContentList = new ArrayList<>(ConteudoDAO.getInstance().MovieValues());
+        this.userMusicContentList = new ArrayList<>(ConteudoDAO.getInstance().valuesFromUser());
+        this.userVideoContentList = new ArrayList<>(ConteudoDAO.getInstance().MovieValuesFromUser());
+        this.allMusicContentList = new ArrayList<>(ConteudoDAO.getInstance().values());
+        this.allVideoContentList = new ArrayList<>(ConteudoDAO.getInstance().MovieValues());
         if(!this.userMusicContentList.isEmpty())this.currentContent = this.userMusicContentList.get(0);
     }
     
@@ -212,7 +222,6 @@ public class MediaCenter {
     public double getMusicProgress() {
         double res = 0;
         try {
-           //res = (Double) (currentPlayer.getCurrentTime().toMillis()/currentPlayer.getTotalDuration().toMillis())*100;
            res = currentPlayer.getCurrentTime().toMillis();
         } catch(NullPointerException e) {
             
@@ -274,7 +283,7 @@ public class MediaCenter {
     
     public void skip_previous_song(){
         stopPlayer();
-        if(this.userMusicContentList.size() == 0)return;
+        if(this.userMusicContentList.isEmpty())return;
         
         if(index > 0 ){
             index--;
@@ -294,7 +303,7 @@ public class MediaCenter {
     public void skip_next_song(){
         stopPlayer();
         
-        if(this.userMusicContentList.size() == 0)return;
+        if(this.userMusicContentList.isEmpty())return;
         
         if(this.userMusicContentList.size() > index + 1){
             index++;
