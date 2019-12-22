@@ -5,6 +5,7 @@
  */
 package Models;
 
+import DAO.CategoriaDAO;
 import DAO.UserDAO;
 import DAO.ConteudoDAO;
 import Views.MainForm;
@@ -77,6 +78,7 @@ public class MediaCenter {
         Content content = null;
         ConteudoDAO ct = ConteudoDAO.getInstance();
         if(fName.endsWith(".mp3")){
+            //ver se existe
             content = getTagAndCreateContent(fName);
         } else if(fName.endsWith(".mp4")) { //TODO: ADICIONAR VIDEOS
          
@@ -327,6 +329,33 @@ public class MediaCenter {
     
     public MediaPlayer getMediaPlayer() {
         return this.currentPlayer;
+    }
+    
+    
+    public void logOut(){
+        stopPlayer();
+        this.currentContent = null;
+        this.currentContentPos = 0;
+        this.currentPlayer = null;
+        this.currentlyLoggedInUser = null;
+        this.index = 0;
+        this.playerStatus = PlayerStatus.STOP;
+        this.userMusicContentList = null;
+        this.userVideoContentList = null;
+        
+    
+    }
+    
+    
+    public Collection<Categoria> getAllCategorias(){
+        CategoriaDAO cat = CategoriaDAO.getInstance();
+        return cat.values();
+    }
+    
+    
+    public void changemyCategoria(Content c,Categoria a){
+        ConteudoDAO conteudo = ConteudoDAO.getInstance();
+        conteudo.changeMyCategoria(c,a.getId());
     }
     
 }
