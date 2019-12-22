@@ -58,29 +58,67 @@ public class ConteudoDAO implements Map<String,Content> {
 
     @Override
     public Content get(Object o) {
-        /*try(Connection con = DriverManager.getConnection("jdbc:mysql://localhost/mediacenter?user=root&password=1999pmqgslbop")){
+        Content c = (Content) o;
+        if(c instanceof MusicContent) return getMusicContent((MusicContent) c);
+        if(c instanceof VideoContent) return getVideoContent((VideoContent) c);
+        return null;
+    }
+
+    private MusicContent getMusicContent(MusicContent c ){
+    
+    try(Connection con = DriverManager.getConnection("jdbc:mysql://localhost/mediacenter?user=root&password=1999pmqgslbop")){
             con.setAutoCommit(false);
             PreparedStatement sql;
-            sql = con.prepareStatement("SELECT * FROM tconteudos WHERE nome=?");
-            sql.setString(1,(String)o);
+            sql = con.prepareStatement("SELECT * FROM MusicContent WHERE nome=?");
+            sql.setString(1,c.getNome());
             ResultSet rs = sql.executeQuery();
             while(rs.next()){
-                int id = rs.getInt("id_conteudo");
+                int id = rs.getInt("id_content");
                 String nome = rs.getString("nome");
-                String cat = rs.getString("categoria");
+                String art = rs.getString("artista");
+                int cat = rs.getInt("categoria");
+                String path = rs.getString("path");
                 int size = rs.getInt("tamanho");
                 //System.out.println(id + " " + nome + " " + cat + " " + size);
-                return new MusicContent(id,nome,cat,);
+                return new MusicContent(id,nome,art,cat,path,Duration.ZERO);
             }
       
         con.commit();
         }catch(SQLException e){
             System.out.println("Deu merda na excessao do get");
             //con.rollback();
-        } */
+        } 
         return null;
+    
     }
-
+    
+    private VideoContent getVideoContent(VideoContent c ){
+    
+    try(Connection con = DriverManager.getConnection("jdbc:mysql://localhost/mediacenter?user=root&password=1999pmqgslbop")){
+            con.setAutoCommit(false);
+            PreparedStatement sql;
+            sql = con.prepareStatement("SELECT * FROM VideoContent WHERE nome=?");
+            sql.setString(1,c.getNome());
+            ResultSet rs = sql.executeQuery();
+            while(rs.next()){
+                int id = rs.getInt("id");
+                String nome = rs.getString("nome");
+                int cat = rs.getInt("categoria");
+                String path = rs.getString("path");
+                int size = rs.getInt("tamanho");
+                //System.out.println(id + " " + nome + " " + cat + " " + size);
+                return new VideoContent(id,nome,cat,path,Duration.ZERO);
+            }
+      
+        con.commit();
+        }catch(SQLException e){
+            System.out.println("Deu merda na excessao do get");
+            //con.rollback();
+        } 
+        return null;
+    
+    }
+    
     @Override
     public Content put(String k, Content c) {
         if(c instanceof MusicContent) return putMusicContent(k,(MusicContent) c);
@@ -200,20 +238,7 @@ public class ConteudoDAO implements Map<String,Content> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    public Collection<Content> getAllMusic(){
-        try (Connection conn = DriverManager.getConnection(urlDatabase)) {
-            
-            Collection<Content> col = new ArrayList<>();
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("SELECT * FROM MusicContent WHERE user_id ="+ MediaCenter.getInstance().getUser().getUserID());
-            
-            while (rs.next()) {
-                col.add(new MusicContent(rs.getString(2),rs.getString(3),rs.getInt(4), rs.getString(5),Duration.millis(rs.getLong(6))));
-            }
-            return col;
-        }
-        catch (Exception e) {throw new NullPointerException(e.getMessage());}
-    }
+   
     
     
     

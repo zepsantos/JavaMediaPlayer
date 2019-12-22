@@ -57,13 +57,16 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="downloadButton" max="32767" attributes="0"/>
-                      <Component id="utilizadorLabel" min="-2" pref="137" max="-2" attributes="0"/>
-                      <Component id="uploadButton" alignment="0" max="32767" attributes="0"/>
-                      <Component id="myMusicButton" alignment="0" max="32767" attributes="0"/>
-                      <Component id="friendsListButton" max="32767" attributes="0"/>
-                      <Component id="myMediaButton" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="downloadButton" max="32767" attributes="0"/>
+                          <Component id="utilizadorLabel" min="-2" pref="137" max="-2" attributes="0"/>
+                          <Component id="uploadButton" alignment="0" max="32767" attributes="0"/>
+                          <Component id="myMusicButton" alignment="0" max="32767" attributes="0"/>
+                          <Component id="friendsListButton" max="32767" attributes="0"/>
+                          <Component id="myMediaButton" max="32767" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace pref="75" max="32767" attributes="0"/>
               </Group>
@@ -84,7 +87,9 @@
                   <Component id="friendsListButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
                   <Component id="utilizadorLabel" min="-2" pref="68" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -152,6 +157,9 @@
             <Property name="text" type="java.lang.String" value="Ver lista de amigos"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="friendsListButtonActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="myMediaButton">
           <Properties>
@@ -166,6 +174,14 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="myMediaButtonActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButton1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="LogOut"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

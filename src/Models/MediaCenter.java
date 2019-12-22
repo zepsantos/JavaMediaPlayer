@@ -72,6 +72,7 @@ public class MediaCenter {
         Content content = null;
         ConteudoDAO ct = ConteudoDAO.getInstance();
         if(fName.endsWith(".mp3")){
+            //ver se existe
             content = getTagAndCreateContent(fName);
         } else if(fName.endsWith(".mp4")) { //TODO: ADICIONAR VIDEOS
          
@@ -81,10 +82,23 @@ public class MediaCenter {
         }
            
         
-        if(content != null) {
-            if(content instanceof MusicContent) this.userMusicContentList.add((MusicContent) content);
-            else this.userVideoContentList.add((VideoContent) content);
-            ct.put(content.getNome(),content);
+        if(content != null) { //??????????
+            if(ct.get(content) == null){ // o conteudo ainda nao existe na base de dados
+                if(content instanceof MusicContent) this.userMusicContentList.add((MusicContent) content);
+                else this.userVideoContentList.add((VideoContent) content);
+                ct.put(content.getNome(),content);
+            }
+            else{ // o conteudo ja existe na base de dados
+                if(content instanceof MusicContent){
+                    if(!this.userMusicContentList.contains(content))this.userMusicContentList.add((MusicContent) content);
+                
+                }else{
+                    if(!this.userVideoContentList.contains(content))this.userVideoContentList.add((VideoContent) content);
+                
+                }
+                
+            }
+            
         }
        
  
@@ -317,5 +331,22 @@ public class MediaCenter {
     public MediaPlayer getMediaPlayer() {
         return this.currentPlayer;
     }
+    
+    
+    public void logOut(){
+        stopPlayer();
+        this.currentContent = null;
+        this.currentContentPos = 0;
+        this.currentPlayer = null;
+        this.currentlyLoggedInUser = null;
+        this.index = 0;
+        this.playerStatus = PlayerStatus.STOP;
+        this.userMusicContentList = null;
+        this.userVideoContentList = null;
+        
+    
+    }
+    
+    
     
 }

@@ -65,6 +65,7 @@ public class MainForm extends javax.swing.JFrame {
         uploadButton = new javax.swing.JButton();
         friendsListButton = new javax.swing.JButton();
         myMediaButton = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -115,6 +116,11 @@ public class MainForm extends javax.swing.JFrame {
         friendsListButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         friendsListButton.setText("Ver lista de amigos");
         friendsListButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        friendsListButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                friendsListButtonActionPerformed(evt);
+            }
+        });
 
         myMediaButton.setBackground(new java.awt.Color(67, 104, 145));
         myMediaButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -126,19 +132,28 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("LogOut");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(downloadButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(utilizadorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(uploadButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(myMusicButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(friendsListButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(myMediaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(downloadButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(utilizadorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(uploadButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(myMusicButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(friendsListButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(myMediaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(75, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -156,7 +171,9 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(friendsListButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(utilizadorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addContainerGap())
         );
 
         jPanel2.setBackground(new java.awt.Color(67, 104, 145));
@@ -592,6 +609,18 @@ public class MainForm extends javax.swing.JFrame {
         drawMoviePlaylistSection();
         
     }//GEN-LAST:event_myMediaButtonActionPerformed
+
+    private void friendsListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_friendsListButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_friendsListButtonActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        MediaCenter mc = MediaCenter.getInstance();
+        mc.logOut();
+        this.dispose();
+        new LoginForm().setVisible(true);
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
     
     private void removeAllMouseListenerFromMusicTable() {
         for(MouseListener l : musicTable.getMouseListeners()) {
@@ -629,8 +658,8 @@ public class MainForm extends javax.swing.JFrame {
                 System.out.println("MOUSE CLICK MOVIE");
                     int column = musicTable.columnAtPoint(evt.getPoint());
                     int row = musicTable.rowAtPoint(evt.getPoint());
-                    if(column == 2) {
-                        System.out.println("2");
+                    if(column == 1) {
+                        changeCategoria();
                     }else if(row>=0) {
                         mc.stopPlayer();
                         MediaView mv = mc.playVideo(row);
@@ -653,6 +682,14 @@ public class MainForm extends javax.swing.JFrame {
         
         
     } 
+    
+    private void changeCategoria(){
+    
+    
+    }
+    
+    
+    
     
     private List<List<String>> MoviePlaylistToTable() {
         List<Content> tmp = MediaCenter.getInstance().getUserVideoContentList();
@@ -717,6 +754,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel compositorLabel;
     private javax.swing.JButton downloadButton;
     private javax.swing.JButton friendsListButton;
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
