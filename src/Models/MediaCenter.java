@@ -171,9 +171,15 @@ public class MediaCenter {
     }
     
     public void readPlaylist() {
+        CategoriaDAO cat = CategoriaDAO.getInstance();
         this.userMusicContentList = new ArrayList<>(ConteudoDAO.getInstance().values());
         this.userVideoContentList = new ArrayList<>(ConteudoDAO.getInstance().MovieValues());
         if(!this.userMusicContentList.isEmpty())this.currentContent = this.userMusicContentList.get(0);
+        
+        for(Content m : userMusicContentList){
+            
+        
+        }
     }
     
     
@@ -343,6 +349,19 @@ public class MediaCenter {
         return cat.values();
     }
     
+    public String getCategoriaMusica(int id){
+        CategoriaDAO cat = CategoriaDAO.getInstance();
+        String categoria = cat.getCategoriaMusica(id);
+        if(categoria == null)categoria = "Sem Categoria";
+        return categoria;
+    }
+    
+    public String getCategoriaVideo(int id){
+        CategoriaDAO cat = CategoriaDAO.getInstance();
+        String categoria = cat.getCategoriaVideo(id);
+        if(categoria == null)categoria = "Sem Categoria";
+        return categoria;
+    }
     
     public void changemyCategoria(Content c,Categoria a){
         ConteudoDAO conteudo = ConteudoDAO.getInstance();

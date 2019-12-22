@@ -543,6 +543,9 @@ public class MainForm extends javax.swing.JFrame {
     } 
     
     private List<List<String>> playlistToTable() {
+        MediaCenter mc = MediaCenter.getInstance();
+        
+        
         List<Content> tmp = MediaCenter.getInstance().getUserContentList();
         List<List<String>> tmpList = new ArrayList<>();
         for(Content c : tmp) {
@@ -551,7 +554,7 @@ public class MainForm extends javax.swing.JFrame {
             List<String> stringList = new ArrayList<>();
             stringList.add(cmc.getNome());
             stringList.add(cmc.getArtista());
-            stringList.add(String.valueOf(cmc.getCategoria()));
+            stringList.add(mc.getCategoriaMusica(cmc.getCategoria()));
             stringList.add(DurationToGoodLookingString(cmc.getTamanho()));
             tmpList.add(stringList);
             }
@@ -734,6 +737,7 @@ public class MainForm extends javax.swing.JFrame {
     
     
     private List<List<String>> MoviePlaylistToTable() {
+        MediaCenter mc = MediaCenter.getInstance();
         List<Content> tmp = MediaCenter.getInstance().getUserVideoContentList();
         List<List<String>> tmpList = new ArrayList<>();
         for(Content c : tmp) {
@@ -741,7 +745,7 @@ public class MainForm extends javax.swing.JFrame {
                 VideoContent cmc = (VideoContent) c;
             List<String> stringList = new ArrayList<>();
             stringList.add(cmc.getNome());
-            stringList.add(String.valueOf(cmc.getCategoria()));
+            stringList.add(mc.getCategoriaVideo(cmc.getCategoria()));
             stringList.add(DurationToGoodLookingString(cmc.getTamanho()));
             tmpList.add(stringList);
             }
