@@ -86,8 +86,17 @@ public class MediaCenter {
             //ver se existe
             content = getTagAndCreateContent(fName);
         } else if(fName.endsWith(".mp4")) { 
-         
-            content = new VideoContent(fName,0,fName,Duration.ZERO);
+            File tmpFile = new File("Conteudo/" + fName);
+            Media media = new Media(tmpFile.toURI().toString());
+                MediaPlayer tmpMedia = new MediaPlayer(media);
+                while(tmpMedia.getStatus() != MediaPlayer.Status.READY){
+                    try {
+                       Thread.sleep(10);
+                    } catch(InterruptedException e) {   
+                    }
+                };
+            
+            content = new VideoContent(fName,0,fName,media.getDuration());
         }  else { // CASO NAO ACABE EM NENHUMA DESTAS EXTENSOES
             System.out.println("Formato nao suportado");
         }
@@ -159,10 +168,19 @@ public class MediaCenter {
                     } catch(InterruptedException e) {   
                     }
                 };
-                content = new MusicContent(id3v1Tag.getTitle(), id3v1Tag.getArtist(),-1,path,media.getDuration());
+                content = new MusicContent(id3v1Tag.getTitle(), id3v1Tag.getArtist(),id3v1Tag.getGenre(),path,media.getDuration());
             }
             }catch(TagException | IOException j){
-                System.out.println(j.getMessage()); //TODO: QUANDO NAO TEM TAGS FAZER ALGUMA COISA
+                File tmpFile = new File("Conteudo/" + path);
+                Media media = new Media(tmpFile.toURI().toString());
+                MediaPlayer tmpMedia = new MediaPlayer(media);
+                while(tmpMedia.getStatus() != MediaPlayer.Status.READY){
+                    try {
+                       Thread.sleep(10);
+                    } catch(InterruptedException e) {   
+                    }
+                };
+                content = new MusicContent(path.subSequence(0, path.lastIndexOf('.')).toString(), "", -1, path, media.getDuration());                
             }
         return content;
     }

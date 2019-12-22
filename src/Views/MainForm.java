@@ -33,6 +33,7 @@ import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;  
 import java.awt.event.*;  
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TableModelEvent;
 /**
  *
@@ -763,7 +764,9 @@ public class MainForm extends javax.swing.JFrame {
     private void changeCategoriaMusica(int row){
         MediaCenter mc = MediaCenter.getInstance();
         Content a = mc.getUserContentList().get(row);
+        
         new ShowForm(a).setVisible(true);
+        
     }
     
     
