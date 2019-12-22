@@ -12,12 +12,12 @@ import Models.MusicContent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-import javafx.util.Duration;
 
 /**
  *
@@ -64,6 +64,32 @@ public class CategoriaDAO implements Map<String,Categoria> {
     @Override
     public Categoria put(String key, Categoria value) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public Categoria put(String key,Categoria value, Content content) {
+        try (Connection con = DriverManager.getConnection(urlDatabase)) {
+            //create the statement
+            Statement st = con.createStatement();
+            StringBuffer sql = null;
+            if(content instanceof MusicContent)
+            sql = new StringBuffer("INSERT INTO MusicGenreSelection (iduser,idmusic,idgenre) VALUES(");
+            else 
+            sql = new StringBuffer("INSERT INTO MovieGenreSelection (iduser,idmovie,idgenre) VALUES(");
+            sql.append(MediaCenter.getInstance().getUser().getUserID());
+            sql.append(",");
+            sql.append(content.getID());
+            sql.append(",");
+            sql.append(value.getId());
+            sql.append(");");
+            System.out.println(sql.toString());
+            st.executeUpdate(sql.toString());
+            
+        }
+        catch (SQLException e) {
+            // Erro ao estabelecer a ligação
+            System.out.println(e.getMessage());
+        }
+        return value;
     }
 
     @Override

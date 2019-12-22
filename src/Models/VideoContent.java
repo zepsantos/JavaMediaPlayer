@@ -54,5 +54,8 @@ public class VideoContent implements Content {
         return this.categoria;
     }
     
+    public int getID() {
+        return this.id;
+    }
     
 }

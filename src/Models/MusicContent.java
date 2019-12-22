@@ -89,6 +89,10 @@ public class MusicContent implements Content { //TODO ADICIONAR ALBUM
         this.tamanho = tamanho;
     }
     
+    public int getID() {
+        return this.id_conteudo;
+    }
+    
     
    
     
