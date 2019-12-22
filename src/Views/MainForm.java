@@ -446,7 +446,7 @@ public class MainForm extends javax.swing.JFrame {
                     int column = musicTable.columnAtPoint(evt.getPoint());
                     int row = musicTable.rowAtPoint(evt.getPoint());
                     if(column == 2) {
-                        System.out.println("2");
+                        // alterar categoria
                     }else if(row>=0) {
                         mc.stopPlayer();
                         mc.play(row);
@@ -556,6 +556,7 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_uploadButtonActionPerformed
     
     private void myMusicButtonActionPerformed(java.awt.event.ActionEvent evt){
+        new ShowForm().setVisible(true);
     }
     
     

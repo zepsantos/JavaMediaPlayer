@@ -156,6 +156,23 @@ public class ConteudoDAO implements Map<String,Content> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    public Collection<Content> getAllMusic(){
+        try (Connection conn = DriverManager.getConnection(urlDatabase)) {
+            
+            Collection<Content> col = new ArrayList<>();
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery("SELECT * FROM MusicContent WHERE user_id ="+ MediaCenter.getInstance().getUser().getUserID());
+            
+            while (rs.next()) {
+                col.add(new MusicContent(rs.getString(2),rs.getString(3),rs.getInt(4), rs.getString(5),Duration.millis(rs.getLong(6))));
+            }
+            return col;
+        }
+        catch (Exception e) {throw new NullPointerException(e.getMessage());}
+    }
+    
+    
+    
     
     
     

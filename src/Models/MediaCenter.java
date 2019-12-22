@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.JFXPanel;
@@ -49,6 +50,14 @@ public class MediaCenter {
         new JFXPanel();
         
     }
+    
+    
+    public List<List<String>> getAllContentList(){
+        ConteudoDAO ct = ConteudoDAO.getInstance();
+        return new ArrayList();
+    
+    }
+    
     public ArrayList<Content> getUserContentList() {
         return new ArrayList<>(userContentList);
     }
