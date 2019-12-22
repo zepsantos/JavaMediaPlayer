@@ -84,23 +84,22 @@ public class MediaCenter {
         }
            
         
-        if(content != null) { //??????????
-            if(ct.get(content) == null){ // o conteudo ainda nao existe na base de dados
-                if(content instanceof MusicContent) this.userMusicContentList.add((MusicContent) content);
-                else this.userVideoContentList.add((VideoContent) content);
-                ct.put(content.getNome(),content);
-            }
-            else{ // o conteudo ja existe na base de dados
-                if(content instanceof MusicContent){
-                    if(!this.userMusicContentList.contains(content))this.userMusicContentList.add((MusicContent) content);
-                
-                }else{
-                    if(!this.userVideoContentList.contains(content))this.userVideoContentList.add((VideoContent) content);
-                
-                }
-                
-            }
+        if(content != null) {
             
+            content = ct.put(content.getNome(),content);
+            if(content instanceof MusicContent){
+                int id = ct.getMusicID((MusicContent)content);
+                content.setID(id);
+                this.userMusicContentList.add((MusicContent) content);
+            }
+            else if(content instanceof VideoContent) {
+                int id = ct.getMovieID((VideoContent)content);
+                content.setID(id);
+                this.userVideoContentList.add((VideoContent) content);
+            } else {
+                //TODO JA EXISTE NA DB
+                System.out.println("Ja existe o ficheiro adicionado");
+            }
         }
        
  
