@@ -12,6 +12,7 @@ import Models.MediaCenter;
 import Models.PlayerStatus;
 import Models.VideoContent;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -637,18 +638,12 @@ public class MainForm extends javax.swing.JFrame {
                         System.out.println("2");
                     }else if(row>=0) {
                         mc.stopPlayer();
-                        MediaView mv = mc.playVideo(row);
+                        try {
+                            Desktop.getDesktop().open(new File("Conteudo/" + mc.getUserVideoContentList().get(row).getPath()));
+                        }catch(IOException e) {
+                            e.printStackTrace();
+                        }
                         changeIconMusicStatus();
-                        /*final JFrame frame = new JFrame();
-                        final JFXPanel fxPanel = new JFXPanel();
-                        fxPanel.
-                        frame.add(fxPanel);
-                        frame.setVisible(true);
-                        frame.setExtendedState(MAXIMIZED_BOTH);
-                        frame.setUndecorated(true);
-                        frame.setVisible(true); */
-                        /*updateMusicInfo();
-                        changeIconMusicStatus(); */
                     }
                     
 

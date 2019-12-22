@@ -9,6 +9,7 @@ import DAO.UserDAO;
 import DAO.ConteudoDAO;
 import Views.MainForm;
 import Views.backgroundUpdater;
+import java.awt.Desktop;
 import java.util.ArrayList;
 import java.io.File; 
 import java.io.FileInputStream;
@@ -186,16 +187,7 @@ public class MediaCenter {
         
     }
     
-    private void reproduceVideo() {
-        if(currentContent == null) return;
-        if(currentPlayer != null) {
-            currentPlayer.play();
-            playerStatus = PlayerStatus.PLAYING;
-        }
-        
-        
-        
-    }
+   
     
     
     private void setContentInPlayer(Content content) {
@@ -245,11 +237,7 @@ public class MediaCenter {
     
    
     
-    public MediaView playVideo(int index) {
-          setContentInPlayer(this.userVideoContentList.get(index));
-          reproduceVideo();
-          return new MediaView(currentPlayer);
-    }
+  
     
     
     
