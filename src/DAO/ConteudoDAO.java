@@ -100,10 +100,32 @@ public class ConteudoDAO implements Map<String,Content> {
         
     }
 
+    public int getMovieID(VideoContent mc) {
+        int tmp = -1;
+        try (Connection con = DriverManager.getConnection(urlDatabase)) {
+            Statement st = con.createStatement();
+            String sql = "SELECT * FROM MovieContent WHERE nome='"+(String)mc.getNome()+"'";
+            ResultSet rs = st.executeQuery(sql);
+            while(rs.next()) {
+                tmp = rs.getInt(1);
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("Erro ao obter o utilizador" + e.getMessage());
+        }
+        return tmp;
+        
+    }
     @Override
     public Content put(String k, Content c) {
-        if(c instanceof MusicContent) return putMusicContent(k,(MusicContent) c);
-        if(c instanceof VideoContent) return putVideoContent(k,(VideoContent) c);
+        if(c instanceof MusicContent){
+            if(getMusicID((MusicContent)c) != -1) return null;
+            return putMusicContent(k,(MusicContent) c);
+        }
+        if(c instanceof VideoContent){
+            if(getMovieID((VideoContent)c) != -1) return null;
+            return putVideoContent(k,(VideoContent) c);
+        }
         
        return null; 
     }

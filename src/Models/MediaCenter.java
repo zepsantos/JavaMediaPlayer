@@ -83,9 +83,21 @@ public class MediaCenter {
            
         
         if(content != null) {
-            if(content instanceof MusicContent) this.userMusicContentList.add((MusicContent) content);
-            else this.userVideoContentList.add((VideoContent) content);
-            ct.put(content.getNome(),content);
+            
+            content = ct.put(content.getNome(),content);
+            if(content instanceof MusicContent){
+                int id = ct.getMusicID((MusicContent)content);
+                content.setID(id);
+                this.userMusicContentList.add((MusicContent) content);
+            }
+            else if(content instanceof VideoContent) {
+                int id = ct.getMovieID((VideoContent)content);
+                content.setID(id);
+                this.userVideoContentList.add((VideoContent) content);
+            } else {
+                //TODO JA EXISTE NA DB
+                System.out.println("Ja existe o ficheiro adicionado");
+            }
         }
        
  

@@ -41,14 +41,7 @@ public class MusicContent implements Content { //TODO ADICIONAR ALBUM
     }
     
     
-    public int getId_conteudo() {
-        return id_conteudo;
-    }
-
-    public void setId_conteudo(int id_conteudo) {
-        this.id_conteudo = id_conteudo;
-    }
-
+    
     public String getNome() {
         return nome;
     }
@@ -93,6 +86,9 @@ public class MusicContent implements Content { //TODO ADICIONAR ALBUM
         return this.id_conteudo;
     }
     
+    public void setID(int id) {
+        this.id_conteudo = id;
+    }
     
    
     

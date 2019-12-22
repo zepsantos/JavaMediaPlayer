@@ -14,5 +14,7 @@ import javafx.util.Duration;
 public interface Content {
     String getPath();
     String getNome();
+    int getID();
+    void setID(int id);
     Duration getTamanho();
 }

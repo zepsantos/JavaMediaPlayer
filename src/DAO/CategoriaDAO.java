@@ -66,7 +66,7 @@ public class CategoriaDAO implements Map<String,Categoria> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    public Categoria put(String key,Categoria value, Content content) {
+    public Categoria put(String key,Categoria value, Content content) { //TODO: VERIFICAR
         try (Connection con = DriverManager.getConnection(urlDatabase)) {
             //create the statement
             Statement st = con.createStatement();
