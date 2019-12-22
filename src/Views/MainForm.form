@@ -58,15 +58,17 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="friendsListButton" max="32767" attributes="0"/>
-                      <Component id="logOutButton" min="-2" max="-2" attributes="0"/>
-                      <Component id="downloadButton" max="32767" attributes="0"/>
-                      <Component id="utilizadorLabel" min="-2" pref="137" max="-2" attributes="0"/>
-                      <Component id="uploadButton" alignment="0" max="32767" attributes="0"/>
-                      <Component id="myMusicButton" alignment="0" max="32767" attributes="0"/>
-                      <Component id="myMediaButton" max="32767" attributes="0"/>
-                      <Component id="allMusicButton" alignment="0" max="32767" attributes="0"/>
-                      <Component id="allMideaButton" max="32767" attributes="0"/>
+                      <Component id="allMusicButton" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="friendsListButton" max="32767" attributes="0"/>
+                          <Component id="logOutButton" min="-2" max="-2" attributes="0"/>
+                          <Component id="downloadButton" max="32767" attributes="0"/>
+                          <Component id="utilizadorLabel" min="-2" pref="137" max="-2" attributes="0"/>
+                          <Component id="uploadButton" alignment="0" max="32767" attributes="0"/>
+                          <Component id="myMusicButton" alignment="0" max="32767" attributes="0"/>
+                          <Component id="myMediaButton" max="32767" attributes="0"/>
+                          <Component id="allMideaButton" max="32767" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace pref="75" max="32767" attributes="0"/>
               </Group>
@@ -75,19 +77,19 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
-                  <Component id="allMusicButton" min="-2" pref="33" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="allMideaButton" min="-2" pref="32" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
                   <Component id="myMusicButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="myMediaButton" min="-2" pref="31" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="allMideaButton" min="-2" pref="32" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="allMusicButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="downloadButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="uploadButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="friendsListButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
                   <Component id="utilizadorLabel" min="-2" pref="68" max="-2" attributes="0"/>
@@ -217,6 +219,9 @@
             <Property name="text" type="java.lang.String" value="Todos os Videos"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="allMideaButtonActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

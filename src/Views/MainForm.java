@@ -162,6 +162,11 @@ public class MainForm extends javax.swing.JFrame {
         allMideaButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         allMideaButton.setText("Todos os Videos");
         allMideaButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        allMideaButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                allMideaButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -170,33 +175,34 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(friendsListButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(logOutButton)
-                    .addComponent(downloadButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(utilizadorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(uploadButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(myMusicButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(myMediaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(allMusicButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(allMideaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(friendsListButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(logOutButton)
+                        .addComponent(downloadButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(utilizadorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(uploadButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(myMusicButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(myMediaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(allMideaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(75, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(47, 47, 47)
-                .addComponent(allMusicButton, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(allMideaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(53, 53, 53)
                 .addComponent(myMusicButton)
                 .addGap(18, 18, 18)
                 .addComponent(myMediaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(allMideaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(allMusicButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(downloadButton)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(uploadButton)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(friendsListButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(utilizadorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -523,7 +529,6 @@ public class MainForm extends javax.swing.JFrame {
         musicTable.addMouseListener(new MouseAdapter() {
              @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                System.out.println("MOUSE CLICK Music");
 
                     int column = musicTable.columnAtPoint(evt.getPoint());
                     int row = musicTable.rowAtPoint(evt.getPoint());
@@ -545,8 +550,12 @@ public class MainForm extends javax.swing.JFrame {
     private List<List<String>> playlistToTable() {
         MediaCenter mc = MediaCenter.getInstance();
         
-        
-        List<Content> tmp = MediaCenter.getInstance().getUserContentList();
+        List<Content> tmp = null;
+        if(state == FormState.MinhasMusicas)
+        tmp = MediaCenter.getInstance().getUserContentList();
+        else if (state == FormState.TodasMusicas) {
+            tmp = MediaCenter.getInstance().getAllMusicContentList();
+        }
         List<List<String>> tmpList = new ArrayList<>();
         for(Content c : tmp) {
             if(c instanceof MusicContent) {
@@ -671,7 +680,17 @@ public class MainForm extends javax.swing.JFrame {
 
     private void allMusicButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allMusicButtonActionPerformed
         // TODO add your handling code here:
+        state = FormState.TodasMusicas;
+        changeFocus();
+        drawPlaylistSection();
     }//GEN-LAST:event_allMusicButtonActionPerformed
+
+    private void allMideaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allMideaButtonActionPerformed
+        // TODO add your handling code here:
+        state = FormState.TodosVideos;
+        changeFocus();
+        drawMoviePlaylistSection();
+    }//GEN-LAST:event_allMideaButtonActionPerformed
     
     private void removeAllMouseListenerFromMusicTable() {
         for(MouseListener l : musicTable.getMouseListeners()) {
@@ -738,7 +757,12 @@ public class MainForm extends javax.swing.JFrame {
     
     private List<List<String>> MoviePlaylistToTable() {
         MediaCenter mc = MediaCenter.getInstance();
-        List<Content> tmp = MediaCenter.getInstance().getUserVideoContentList();
+        List<Content> tmp = null;
+        if(state == FormState.MeusVideos)
+        tmp = MediaCenter.getInstance().getUserVideoContentList();
+        else if(state == FormState.TodosVideos) 
+            tmp = MediaCenter.getInstance().getAllVideoContentList();
+            
         List<List<String>> tmpList = new ArrayList<>();
         for(Content c : tmp) {
             if(c instanceof VideoContent) {
@@ -755,13 +779,26 @@ public class MainForm extends javax.swing.JFrame {
     }
     
     private void changeFocus() {
-        if(state == FormState.MinhasMusicas) {
-          myMusicButton.setForeground(Color.WHITE);
+        myMusicButton.setForeground(Color.BLACK);
           myMediaButton.setForeground(Color.BLACK);
-        } else {
-          myMusicButton.setForeground(Color.BLACK);
-          myMediaButton.setForeground(Color.WHITE);
-        }
+          allMusicButton.setForeground(Color.BLACK);
+          allMideaButton.setForeground(Color.BLACK);
+       switch(state) {
+           case MeusVideos:
+               myMediaButton.setForeground(Color.WHITE);
+               break;
+           case MinhasMusicas:
+               myMusicButton.setForeground(Color.WHITE);
+               break;
+           case TodasMusicas:
+               allMusicButton.setForeground(Color.WHITE);
+               break;
+           case TodosVideos:
+               allMideaButton.setForeground(Color.WHITE);
+               break;
+           default:
+               break;
+       }
         
     }
     

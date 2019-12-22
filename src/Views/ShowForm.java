@@ -62,6 +62,7 @@ public class ShowForm extends javax.swing.JFrame {
                         mc.changemyCategoria(c,lista.get(row*8 +column));
                         
                     }
+                    
               
         }
         });
@@ -119,6 +120,16 @@ public class ShowForm extends javax.swing.JFrame {
             }
         ));
         jScrollPane3.setViewportView(tabela);
+        if (tabela.getColumnModel().getColumnCount() > 0) {
+            tabela.getColumnModel().getColumn(0).setHeaderValue("Nome");
+            tabela.getColumnModel().getColumn(1).setHeaderValue("Artista");
+            tabela.getColumnModel().getColumn(2).setHeaderValue("Categoria");
+            tabela.getColumnModel().getColumn(3).setHeaderValue("Duração");
+            tabela.getColumnModel().getColumn(4).setHeaderValue("Title 5");
+            tabela.getColumnModel().getColumn(5).setHeaderValue("Title 6");
+            tabela.getColumnModel().getColumn(6).setHeaderValue("Title 7");
+            tabela.getColumnModel().getColumn(7).setHeaderValue("Title 8");
+        }
 
         jButton1.setText("dispose");
         jButton1.addActionListener(new java.awt.event.ActionListener() {

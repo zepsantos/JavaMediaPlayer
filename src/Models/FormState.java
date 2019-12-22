@@ -10,6 +10,6 @@ package Models;
  * @author josepgrs
  */
 public enum FormState {
-    MinhasMusicas,MeusVideos;
+    MinhasMusicas,MeusVideos,TodasMusicas,TodosVideos;
     
 }

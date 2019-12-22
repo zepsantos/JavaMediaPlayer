@@ -95,6 +95,32 @@ public class ConteudoDAO implements Map<String,Content> {
     
     }
     
+    public int getOwner(Content c) {
+        int tmp = -1;
+        boolean music = c instanceof MusicContent;
+        try (Connection con = DriverManager.getConnection(urlDatabase)) {
+            Statement st = con.createStatement();
+            String sql;
+            if(music)
+             sql = "SELECT * FROM MusicContent WHERE id_content="+String.valueOf(c.getID());
+            else
+             sql = "SELECT * FROM VideoContent WHERE id="+String.valueOf(c.getID());
+ 
+            ResultSet rs = st.executeQuery(sql);
+            while(rs.next()) {
+                if(music)
+                tmp = rs.getInt(7);
+                else 
+                 tmp=rs.getInt(8);
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("Erro ao obter o utilizador" + e.getMessage());
+        }
+        return tmp;
+        
+    }
+    
     public int getMusicID(MusicContent mc) {
         int tmp = -1;
         try (Connection con = DriverManager.getConnection(urlDatabase)) {
@@ -110,6 +136,34 @@ public class ConteudoDAO implements Map<String,Content> {
         }
         return tmp;
         
+    }
+    
+    
+    public Content putRepeatedContent(Content content) {
+        boolean music = content instanceof MusicContent;
+         try (Connection con = DriverManager.getConnection(urlDatabase)) {
+            //create the statement
+            Statement st = con.createStatement();
+            StringBuffer sql;
+            if(music)
+            sql = new StringBuffer("INSERT INTO MusicUploaded (iduser,idmusic) VALUES(");
+            else
+                sql =  new StringBuffer("INSERT INTO VideoUploaded (iduser,idvideo) VALUES(");
+            sql.append(MediaCenter.getInstance().getUser().getUserID());
+            sql.append(",");
+            sql.append(content.getID());
+            sql.append("");
+            sql.append(");");
+            System.out.println(sql.toString());
+            st.executeUpdate(sql.toString());
+            
+        }
+        catch (SQLException e) {
+            // Erro ao estabelecer a ligação
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return content;
     }
 
     public int getMovieID(VideoContent mc) {
@@ -236,9 +290,12 @@ public class ConteudoDAO implements Map<String,Content> {
         try (Connection conn = DriverManager.getConnection(urlDatabase)) {
             
             Collection<Content> col = new ArrayList<>();
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("SELECT * FROM MusicContent WHERE user_id ="+ MediaCenter.getInstance().getUser().getUserID());
-            
+            StringBuffer sql = new StringBuffer("SELECT * FROM MusicContent WHERE user_id =? UNION SELECT id_content,nome,artista,categoria,path,tamanho,user_id from MusicContent mc INNER JOIN MusicUploaded mu on mc.id_content = mu.idmusic WHERE mu.iduser =?");
+            PreparedStatement stm = conn.prepareStatement(sql.toString());
+            int userid = MediaCenter.getInstance().getUser().getUserID();
+            stm.setInt(1, userid);
+            stm.setInt(2,userid);
+            ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 col.add(new MusicContent(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4), rs.getString(5),Duration.millis(rs.getLong(6))));
             }
@@ -249,12 +306,32 @@ public class ConteudoDAO implements Map<String,Content> {
     }
     
   
+    public Collection<VideoContent> MovieValuesFromUser() {
+        try (Connection conn = DriverManager.getConnection(urlDatabase)) {
+            
+            Collection<VideoContent> col = new ArrayList<>();
+            StringBuffer sql = new StringBuffer("SELECT * from VideoContent  Where user_id = ? " +
+"UNION " +
+"SELECT id,nome,categoria,tamanho,path,user_id from VideoContent mc INNER JOIN VideoUploaded mu on mc.id=mu.idmovie WHERE mu.iduser = ?;");
+            PreparedStatement stm = conn.prepareStatement(sql.toString());
+            int userid = MediaCenter.getInstance().getUser().getUserID();
+            stm.setInt(1, userid);
+            stm.setInt(2,userid);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                col.add(new VideoContent(rs.getInt(1),rs.getString(2),rs.getInt(3), rs.getString(5),Duration.seconds(rs.getLong(4))));
+            }
+            return col;
+        }
+        catch (Exception e) {throw new NullPointerException(e.getMessage());}
+    }
+    
     public Collection<VideoContent> MovieValues() {
         try (Connection conn = DriverManager.getConnection(urlDatabase)) {
             
             Collection<VideoContent> col = new ArrayList<>();
             Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("SELECT * FROM VideoContent WHERE user_id ="+ MediaCenter.getInstance().getUser().getUserID());
+            ResultSet rs = stm.executeQuery("SELECT * FROM VideoContent ");
             
             while (rs.next()) {
                 col.add(new VideoContent(rs.getInt(1),rs.getString(2),rs.getInt(3), rs.getString(5),Duration.seconds(rs.getLong(4))));

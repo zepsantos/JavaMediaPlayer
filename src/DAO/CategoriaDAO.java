@@ -137,15 +137,12 @@ public class CategoriaDAO implements Map<String,Categoria> {
     public String getCategoriaMusica(int id){
         String result = null;
        try (Connection conn = DriverManager.getConnection(urlDatabase)) {
-            Collection<Categoria> col = new ArrayList<>(80);
+            
+           
             Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery("SELECT * FROM MusicGenre WHERE id ="+id);
             
-            while (rs.next()) {
-                result = rs.getString("NomeGenre");
-            }
-           
-            
+            return rs.getString(2);
         }
         catch (Exception e) {throw new NullPointerException(e.getMessage());} 
        return result;
