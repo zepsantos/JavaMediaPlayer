@@ -65,35 +65,7 @@ public class ConteudoDAO implements Map<String,Content> {
         return null;
     }
 
-    private MusicContent getMusicContent(MusicContent c ){
-    
-    try(Connection con = DriverManager.getConnection("jdbc:mysql://localhost/mediacenter?user=root&password=1999pmqgslbop")){
-            con.setAutoCommit(false);
-            PreparedStatement sql;
-           
-            sql = con.prepareStatement("SELECT * FROM tconteudos WHERE nome=?");
-            sql.setString(1,c.getNome());
-            ResultSet rs = sql.executeQuery();
-            while(rs.next()){
-                int id = rs.getInt("id_content");
-                String nome = rs.getString("nome");
-                String art = rs.getString("artista");
-                int cat = rs.getInt("categoria");
-                String path = rs.getString("path");
-                int size = rs.getInt("tamanho");
-                //System.out.println(id + " " + nome + " " + cat + " " + size);
-                return new MusicContent(id,nome,art,cat,path,Duration.ZERO);
-            }
-      
-        con.commit();
-        }catch(SQLException e){
-            System.out.println("Deu merda na excessao do get");
-            //con.rollback();
-        } 
-        
-        return null;
-    
-    }
+   
     
     public int getOwner(Content c) {
         int tmp = -1;
@@ -111,7 +83,7 @@ public class ConteudoDAO implements Map<String,Content> {
                 if(music)
                 tmp = rs.getInt(7);
                 else 
-                 tmp=rs.getInt(8);
+                 tmp=rs.getInt(6);
             }
         }
         catch (SQLException e) {
@@ -148,11 +120,10 @@ public class ConteudoDAO implements Map<String,Content> {
             if(music)
             sql = new StringBuffer("INSERT INTO MusicUploaded (iduser,idmusic) VALUES(");
             else
-                sql =  new StringBuffer("INSERT INTO VideoUploaded (iduser,idvideo) VALUES(");
+                sql =  new StringBuffer("INSERT INTO VideoUploaded (iduser,idmovie) VALUES(");
             sql.append(MediaCenter.getInstance().getUser().getUserID());
             sql.append(",");
             sql.append(content.getID());
-            sql.append("");
             sql.append(");");
             System.out.println(sql.toString());
             st.executeUpdate(sql.toString());
@@ -170,14 +141,14 @@ public class ConteudoDAO implements Map<String,Content> {
         int tmp = -1;
         try (Connection con = DriverManager.getConnection(urlDatabase)) {
             Statement st = con.createStatement();
-            String sql = "SELECT * FROM MovieContent WHERE nome='"+(String)mc.getNome()+"'";
+            String sql = "SELECT * FROM VideoContent WHERE nome='"+(String)mc.getNome()+"'";
             ResultSet rs = st.executeQuery(sql);
             while(rs.next()) {
                 tmp = rs.getInt(1);
             }
         }
         catch (SQLException e) {
-            System.out.println("Erro ao obter o utilizador" + e.getMessage());
+            System.out.println("Erro ao obter o Filme" + e.getMessage());
         }
         return tmp;
         

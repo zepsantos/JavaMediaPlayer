@@ -85,36 +85,69 @@ public class MediaCenter {
         if(fName.endsWith(".mp3")){
             //ver se existe
             content = getTagAndCreateContent(fName);
-        } else if(fName.endsWith(".mp4")) { //TODO: ADICIONAR VIDEOS
-         
-            content = new VideoContent(fName,0,fName,Duration.ZERO);
+        } else if(fName.endsWith(".mp4")) { 
+            File tmpFile = new File("Conteudo/" + fName);
+            Media media = new Media(tmpFile.toURI().toString());
+                MediaPlayer tmpMedia = new MediaPlayer(media);
+                while(tmpMedia.getStatus() != MediaPlayer.Status.READY){
+                    try {
+                       Thread.sleep(10);
+                    } catch(InterruptedException e) {   
+                    }
+                };
+            
+            content = new VideoContent(fName,0,fName,media.getDuration());
         }  else { // CASO NAO ACABE EM NENHUMA DESTAS EXTENSOES
-          
+            System.out.println("Formato nao suportado");
         }
            
         
         if(content != null) {
+            boolean music = content instanceof MusicContent;
+            Content tmp = content;
+            
             
             content = ct.put(content.getNome(),content);
+           
+            System.out.println(content);
             if(content instanceof MusicContent){
                 int id = ct.getMusicID((MusicContent)content);
                 content.setID(id);
-                this.userMusicContentList.add((MusicContent) content);
+                addContentToLists(music, content);
             }
             else if(content instanceof VideoContent) {
                 int id = ct.getMovieID((VideoContent)content);
                 content.setID(id);
-                this.userVideoContentList.add((VideoContent) content);
+                addContentToLists(music, content);
             } else {
                 //TODO JA EXISTE NA DB
                 System.out.println("Ja existe o ficheiro adicionado");
-                if(ct.getOwner(content) != getUser().getUserID()) {
-                    ct.putRepeatedContent(content);
+                if(tmp instanceof MusicContent)
+                tmp.setID(ct.getMusicID((MusicContent)tmp));
+                else{
+                    tmp.setID(ct.getMovieID((VideoContent)tmp));
+                }
+                
+                if(ct.getOwner(tmp) != getUser().getUserID()) {
+                    if(ct.putRepeatedContent(tmp) != null ) {
+                     addContentToLists(music, tmp);
+                    }
                 }
             }
         }
        
  
+    }
+    
+    private void addContentToLists(boolean music,Content content) {
+        if(music){
+            this.userMusicContentList.add((MusicContent) content);
+                this.allMusicContentList.add((MusicContent)content);
+        }else {
+            this.userVideoContentList.add((VideoContent) content);
+        this.allVideoContentList.add((VideoContent) content);
+        }
+        
     }
     
     
@@ -135,10 +168,19 @@ public class MediaCenter {
                     } catch(InterruptedException e) {   
                     }
                 };
-                content = new MusicContent(id3v1Tag.getTitle(), id3v1Tag.getArtist(),-1,path,media.getDuration());
+                content = new MusicContent(id3v1Tag.getTitle(), id3v1Tag.getArtist(),id3v1Tag.getGenre(),path,media.getDuration());
             }
             }catch(TagException | IOException j){
-                System.out.println(j.getMessage()); //TODO: QUANDO NAO TEM TAGS FAZER ALGUMA COISA
+                File tmpFile = new File("Conteudo/" + path);
+                Media media = new Media(tmpFile.toURI().toString());
+                MediaPlayer tmpMedia = new MediaPlayer(media);
+                while(tmpMedia.getStatus() != MediaPlayer.Status.READY){
+                    try {
+                       Thread.sleep(10);
+                    } catch(InterruptedException e) {   
+                    }
+                };
+                content = new MusicContent(path.subSequence(0, path.lastIndexOf('.')).toString(), "", -1, path, media.getDuration());                
             }
         return content;
     }
