@@ -64,8 +64,8 @@ public class MediaCenter {
         ConteudoDAO ct = ConteudoDAO.getInstance();
         if(fName.endsWith(".mp3")){
             content = getTagAndCreateContent(fName);
-        } else if(fName.endsWith(".avi")) { //TODO: ADICIONAR VIDEOS
-            content = new VideoContent(fName,fName,Duration.ZERO);
+        } else if(fName.endsWith(".mp4")) { //TODO: ADICIONAR VIDEOS
+            content = new VideoContent(0,fName,0,fName,Duration.ZERO);
         }  else { // CASO NAO ACABE EM NENHUMA DESTAS EXTENSOES
             
         }
@@ -147,6 +147,7 @@ public class MediaCenter {
     
     public void readPlaylist() {
         this.userMusicContentList = new ArrayList<>(ConteudoDAO.getInstance().values());
+        this.userVideoContentList = new ArrayList<>(ConteudoDAO.getInstance().MovieValues());
     }
     
     
@@ -163,7 +164,7 @@ public class MediaCenter {
         if(currentContent == null) {
             currentContent = userMusicContentList.get(index);
         if(currentContent == null) return;
-            setMusicInPlayer(currentContent);
+            setContentInPlayer(currentContent);
         } 
         if(currentPlayer != null) {
             currentPlayer.play();
@@ -174,8 +175,19 @@ public class MediaCenter {
         
     }
     
+    private void reproduceVideo() {
+        if(currentContent == null) return;
+        if(currentPlayer != null) {
+            currentPlayer.play();
+            playerStatus = PlayerStatus.PLAYING;
+        }
+        
+        
+        
+    }
     
-    private void setMusicInPlayer(Content content) {
+    
+    private void setContentInPlayer(Content content) {
         File tmpFile = new File("Conteudo/" + content.getPath());
         setCurrentPlayer(new MediaPlayer(new Media(tmpFile.toURI().toString())));
         currentContent = content;
@@ -195,6 +207,7 @@ public class MediaCenter {
     
     private void setCurrentPlayer(final MediaPlayer player) {
         currentPlayer = player;
+        if(currentContent instanceof MusicContent)
         currentPlayer.setOnEndOfMedia(() -> {
                 
             if(++index < userMusicContentList.size()) {
@@ -206,26 +219,25 @@ public class MediaCenter {
             }
 		
 	});
-        currentPlayer.totalDurationProperty().addListener(new ChangeListener<Duration>() {
-            @Override
-            public void changed(ObservableValue<? extends Duration> ov, Duration t, Duration t1) {
-                     
-            }
-            
-        });
-        
     }
     
    
 
-    public void play(){
+    public void playMusic(){
         reproduceMusic();
-        this.playerStatus = PlayerStatus.PLAYING;
     }
     
-    public void play(int musicIndex) {
-        setMusicInPlayer(this.userMusicContentList.get(musicIndex));
-        play();
+    public void playMusic(int index) {
+        setContentInPlayer(this.userMusicContentList.get(index));
+        playMusic();
+    }
+    
+   
+    
+    public MediaView playVideo(int index) {
+          setContentInPlayer(this.userVideoContentList.get(index));
+          reproduceVideo();
+          return new MediaView(currentPlayer);
     }
     
     

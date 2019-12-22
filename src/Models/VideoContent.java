@@ -14,11 +14,13 @@ import javafx.util.Duration;
 public class VideoContent implements Content {
     private String path,nome;
     private Duration tamanho;
-
-    public VideoContent(String nome, String path, Duration tamanho) {
+    private int categoria,id;
+    public VideoContent(int id,String nome,int categoria, String path, Duration tamanho) {
         this.nome = nome;
         this.path = path;
+        this.categoria = categoria;
         this.tamanho = tamanho;
+        this.id = id;
     }
 
     @Override
@@ -34,6 +36,10 @@ public class VideoContent implements Content {
     @Override
     public Duration getTamanho() {
         return this.tamanho;
+    }
+    
+    public int getCategoria() {
+        return this.categoria;
     }
     
     

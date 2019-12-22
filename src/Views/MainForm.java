@@ -9,6 +9,7 @@ import Models.Content;
 import Models.MusicContent;
 import Models.MediaCenter;
 import Models.PlayerStatus;
+import Models.VideoContent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -18,8 +19,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.media.MediaView;
 import javafx.util.Duration;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 /**
@@ -28,7 +33,9 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MainForm extends javax.swing.JFrame {
     int musicShownPlaylist = 0;
-    int progressStatus = 0;
+
+    
+    
     /**
      * Creates new form MainMenu
      */
@@ -431,7 +438,7 @@ public class MainForm extends javax.swing.JFrame {
     } 
     
     
-    private void drawPlaylistSection() {
+    private void drawPlaylistSection() { //TODO: DESENHAR TABELA DE NOVO , TIRAR O LISTENER DOS MOVIES
         int i = 0;
         DefaultTableModel model = (DefaultTableModel) musicTable.getModel();
         List<List<String>> tmp = playlistToTable();
@@ -444,16 +451,19 @@ public class MainForm extends javax.swing.JFrame {
         }
 
         MediaCenter mc = MediaCenter.getInstance();
+        removeAllMouseListenerFromMusicTable();
         musicTable.addMouseListener(new MouseAdapter() {
              @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                System.out.println("MOUSE CLICK Music");
+
                     int column = musicTable.columnAtPoint(evt.getPoint());
                     int row = musicTable.rowAtPoint(evt.getPoint());
                     if(column == 2) {
                         System.out.println("2");
                     }else if(row>=0) {
                         mc.stopPlayer();
-                        mc.play(row);
+                        mc.playMusic(row);
                         updateMusicInfo();
                         changeIconMusicStatus();
                     }
@@ -487,7 +497,11 @@ public class MainForm extends javax.swing.JFrame {
         int seconds = (int) (milis/1000) % 60;
         StringBuilder sb = new StringBuilder(String.valueOf(minutes));
         sb.append(":");
+        if(seconds/10 == 0)
+            sb.append("0");
+       
         sb.append(String.valueOf(seconds));
+
         return sb.toString();
         
         
@@ -511,7 +525,7 @@ public class MainForm extends javax.swing.JFrame {
        MediaCenter mc = MediaCenter.getInstance();
        if(mc.getPlayListSize() == 0)return;
        if(mc.getStatus() != PlayerStatus.PLAYING ){
-           mc.play();
+           mc.playMusic();
            updateMusicInfo();
        }else {
            mc.pause();
@@ -561,11 +575,79 @@ public class MainForm extends javax.swing.JFrame {
 
     private void myMediaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_myMediaButtonActionPerformed
         // TODO add your handling code here:
-        String[] columnNames = {"Nome", "Categoria", "Duracao" };
-        DefaultTableModel model = new DefaultTableModel(columnNames,0);
-        
+        musicShownPlaylist = 0;
+        drawMoviePlaylistSection();
         
     }//GEN-LAST:event_myMediaButtonActionPerformed
+    
+    private void removeAllMouseListenerFromMusicTable() {
+        for(MouseListener l : musicTable.getMouseListeners()) {
+            musicTable.removeMouseListener(l);
+        }
+    }
+    
+    private void drawMoviePlaylistSection() {
+        int i = 0;
+        String[] columnNames = {"Nome", "Categoria", "Duracao" };
+        DefaultTableModel model = new DefaultTableModel(columnNames,0);
+
+        List<List<String>> tmp = MoviePlaylistToTable();
+        for(List<String> tableData : tmp) {
+            if(i>=musicShownPlaylist) {
+            musicShownPlaylist++;
+            model.addRow(tableData.stream().toArray());
+            }
+            i++;
+        }
+
+        MediaCenter mc = MediaCenter.getInstance();
+        removeAllMouseListenerFromMusicTable();
+        musicTable.addMouseListener(new MouseAdapter() {
+             @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                System.out.println("MOUSE CLICK MOVIE");
+                    int column = musicTable.columnAtPoint(evt.getPoint());
+                    int row = musicTable.rowAtPoint(evt.getPoint());
+                    if(column == 2) {
+                        System.out.println("2");
+                    }else if(row>=0) {
+                        mc.stopPlayer();
+                        MediaView mv = mc.playVideo(row);
+                        /*final JFrame frame = new JFrame();
+                        final JFXPanel fxPanel = new JFXPanel();
+                        fxPanel.
+                        frame.add(fxPanel);
+                        frame.setVisible(true);
+                        frame.setExtendedState(MAXIMIZED_BOTH);
+                        frame.setUndecorated(true);
+                        frame.setVisible(true); */
+                        /*updateMusicInfo();
+                        changeIconMusicStatus(); */
+                    }
+                    
+
+        }
+        });
+        musicTable.setModel(model);
+    } 
+    
+    private List<List<String>> MoviePlaylistToTable() {
+        List<Content> tmp = MediaCenter.getInstance().getUserVideoContentList();
+        List<List<String>> tmpList = new ArrayList<>();
+        for(Content c : tmp) {
+            if(c instanceof VideoContent) {
+                VideoContent cmc = (VideoContent) c;
+            List<String> stringList = new ArrayList<>();
+            stringList.add(cmc.getNome());
+            stringList.add(String.valueOf(cmc.getCategoria()));
+            stringList.add(DurationToGoodLookingString(cmc.getTamanho()));
+            tmpList.add(stringList);
+            }
+        }
+        return tmpList;
+        
+    }
+    
     
     private void myMusicButtonActionPerformed(java.awt.event.ActionEvent evt){
     }
