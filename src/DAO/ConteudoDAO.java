@@ -8,6 +8,7 @@ import java.util.Map;
 import Models.Content;
 import Models.MediaCenter;
 import Models.MusicContent;
+import Models.VideoContent;
 import java.util.Collection;
 import java.util.Set;
 import java.sql.*;
@@ -83,8 +84,35 @@ public class ConteudoDAO implements Map<String,Content> {
     @Override
     public Content put(String k, Content c) {
         if(c instanceof MusicContent) return putMusicContent(k,(MusicContent) c);
+        if(c instanceof VideoContent) return putVideoContent(k,(VideoContent) c);
         
        return null; 
+    }
+    
+    public VideoContent putVideoContent(String k, VideoContent v) {
+        try (Connection con = DriverManager.getConnection(urlDatabase)) {
+            //create the statement
+            Statement st = con.createStatement();
+            StringBuffer sql = new StringBuffer("INSERT INTO VideoContent (nome,categoria,tamanho,path,user_id) VALUES('");
+            sql.append(k);
+            sql.append("','");
+            sql.append(v.getCategoria());
+            sql.append("','");
+            sql.append(v.getTamanho().toSeconds());
+            sql.append("','");
+            sql.append(v.getPath());
+            sql.append("',");
+            sql.append(MediaCenter.getInstance().getUser().getUserID());
+            sql.append(");");
+            System.out.println(sql.toString());
+            st.executeUpdate(sql.toString());
+            
+        }
+        catch (SQLException e) {
+            // Erro ao estabelecer a ligação
+            System.out.println(e.getMessage());
+        }
+        return v;
     }
     
     public MusicContent putMusicContent(String k, MusicContent v) {
@@ -145,6 +173,22 @@ public class ConteudoDAO implements Map<String,Content> {
             
             while (rs.next()) {
                 col.add(new MusicContent(rs.getString(2),rs.getString(3),rs.getInt(4), rs.getString(5),Duration.millis(rs.getLong(6))));
+            }
+            return col;
+        }
+        catch (Exception e) {throw new NullPointerException(e.getMessage());}
+    }
+    
+  
+    public Collection<VideoContent> MovieValues() {
+        try (Connection conn = DriverManager.getConnection(urlDatabase)) {
+            
+            Collection<VideoContent> col = new ArrayList<>();
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery("SELECT * FROM VideoContent WHERE user_id ="+ MediaCenter.getInstance().getUser().getUserID());
+            
+            while (rs.next()) {
+                col.add(new VideoContent(rs.getInt(1),rs.getString(2),rs.getInt(3), rs.getString(5),Duration.seconds(rs.getLong(4))));
             }
             return col;
         }
