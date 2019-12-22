@@ -442,9 +442,9 @@ public class MainForm extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) musicTable.getModel();
         
         
-        if(this.videoShownPlayList > 0){
-            model.removeRow(this.videoShownPlayList-1);
+        while(this.videoShownPlayList > 0){
             this.videoShownPlayList--;
+            model.removeRow(this.videoShownPlayList);
         }
         this.videoShownPlayList = 0;
         
@@ -571,7 +571,11 @@ public class MainForm extends javax.swing.JFrame {
             try{    
                 Files.copy(Paths.get(f.getPath()),Paths.get("Conteudo/" +f.getName())); 
                 mc.addFile(f.getName());
-                drawPlaylistSection();
+                if(this.musicShownPlaylist > 0 ){
+                    drawPlaylistSection();
+                }else{
+                    drawMoviePlaylistSection();
+                }
                 if(mc.getPlayListSize() == 1){
                     this.updateMetaData();
                 }
@@ -599,10 +603,11 @@ public class MainForm extends javax.swing.JFrame {
         int i = 0;
         String[] columnNames = {"Nome", "Categoria", "Duracao" };
         DefaultTableModel model = (DefaultTableModel) this.musicTable.getModel();
-        System.out.println(this.musicShownPlaylist);
+        
         while(this.musicShownPlaylist > 0){ // retira as musicas caso a tenha, capaz de dar merda tbh
-            model.removeRow(this.musicShownPlaylist-1);
             this.musicShownPlaylist--;
+            model.removeRow(this.musicShownPlaylist);
+            
         }
         this.musicShownPlaylist = 0;
         model.setColumnIdentifiers(columnNames);
@@ -629,6 +634,7 @@ public class MainForm extends javax.swing.JFrame {
                     }else if(row>=0) {
                         mc.stopPlayer();
                         MediaView mv = mc.playVideo(row);
+                        changeIconMusicStatus();
                         /*final JFrame frame = new JFrame();
                         final JFXPanel fxPanel = new JFXPanel();
                         fxPanel.
@@ -644,7 +650,8 @@ public class MainForm extends javax.swing.JFrame {
 
         }
         });
-        musicTable.setModel(model);
+        
+        
     } 
     
     private List<List<String>> MoviePlaylistToTable() {
