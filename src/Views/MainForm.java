@@ -11,6 +11,7 @@ import Models.MusicContent;
 import Models.MediaCenter;
 import Models.PlayerStatus;
 import Models.VideoContent;
+import Models.Categoria;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.event.MouseAdapter;
@@ -549,6 +550,8 @@ public class MainForm extends javax.swing.JFrame {
     } 
     
     private List<List<String>> playlistToTable() {
+        MediaCenter mc = MediaCenter.getInstance();
+        List<Categoria> lista = mc.getcategoriasMusic();
         List<Content> tmp = null;
         if(state == FormState.MinhasMusicas)
         tmp = MediaCenter.getInstance().getUserContentList();
@@ -562,7 +565,9 @@ public class MainForm extends javax.swing.JFrame {
             List<String> stringList = new ArrayList<>();
             stringList.add(cmc.getNome());
             stringList.add(cmc.getArtista());
-            stringList.add(String.valueOf(cmc.getCategoria()));
+            System.out.println(cmc.getCategoria());
+            if(cmc.getCategoria()<0 )stringList.add("Sem Categoria");
+            else stringList.add(lista.get(cmc.getCategoria()).getNome());
             stringList.add(DurationToGoodLookingString(cmc.getTamanho()));
             tmpList.add(stringList);
             }
@@ -765,6 +770,8 @@ public class MainForm extends javax.swing.JFrame {
     
     
     private List<List<String>> MoviePlaylistToTable() {
+        MediaCenter mc = MediaCenter.getInstance();
+        List<Categoria> lista = mc.getcategoriaVideo();
         List<Content> tmp = null;
         if(state == FormState.MeusVideos)
         tmp = MediaCenter.getInstance().getUserVideoContentList();
@@ -777,7 +784,8 @@ public class MainForm extends javax.swing.JFrame {
                 VideoContent cmc = (VideoContent) c;
             List<String> stringList = new ArrayList<>();
             stringList.add(cmc.getNome());
-            stringList.add(String.valueOf(cmc.getCategoria()));
+            if(cmc.getCategoria()<0 ) stringList.add("Sem Categoria");
+            else stringList.add(lista.get(cmc.getCategoria()).getNome());
             stringList.add(DurationToGoodLookingString(cmc.getTamanho()));
             tmpList.add(stringList);
             }

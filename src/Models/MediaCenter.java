@@ -40,7 +40,8 @@ public class MediaCenter {
     private ArrayList<VideoContent> userVideoContentList;
     private ArrayList<Content> allMusicContentList;
     private ArrayList<Content> allVideoContentList;
-
+    private ArrayList<Categoria> categoriasMusic;
+    private ArrayList<Categoria> categoriasVideo;
     
     private Content currentContent;
     private int index = 0;
@@ -55,6 +56,8 @@ public class MediaCenter {
         this.userVideoContentList = new ArrayList<>();
         this.allMusicContentList = new ArrayList<>();
         this.allVideoContentList = new ArrayList<>();
+        this.categoriasVideo = new ArrayList();
+        this.allVideoContentList = new ArrayList();
         this.playerStatus = PlayerStatus.STOP;
         currentlyLoggedInUser = null;
         new JFXPanel();
@@ -210,12 +213,20 @@ public class MediaCenter {
         this.allMusicContentList = new ArrayList<>(ConteudoDAO.getInstance().values());
         this.allVideoContentList = new ArrayList<>(ConteudoDAO.getInstance().MovieValues());
         if(!this.userMusicContentList.isEmpty())this.currentContent = this.userMusicContentList.get(0);
+        this.categoriasMusic = new ArrayList<>(CategoriaDAO.getInstance().values());
+        this.categoriasVideo = new ArrayList<>(CategoriaDAO.getInstance().valuesVideo());
+       
     }
     
     
-        
+    public List<Categoria> getcategoriasMusic(){
+        return this.categoriasMusic;
+    }
     
+    public List<Categoria> getcategoriaVideo(){
+        return this.categoriasVideo;
     
+    }
  
     
     public void readANDinit(){
@@ -381,6 +392,19 @@ public class MediaCenter {
         return cat.values();
     }
     
+    public String getCategoriaMusica(int id){
+        CategoriaDAO cat = CategoriaDAO.getInstance();
+        String categoria = cat.getCategoriaMusica(id);
+        if(categoria == null)categoria = "Sem Categoria";
+        return categoria;
+    }
+    
+    public String getCategoriaVideo(int id){
+        CategoriaDAO cat = CategoriaDAO.getInstance();
+        String categoria = cat.getCategoriaVideo(id);
+        if(categoria == null)categoria = "Sem Categoria";
+        return categoria;
+    }
     
     public void changemyCategoria(Content c,Categoria a){
         ConteudoDAO conteudo = ConteudoDAO.getInstance();
