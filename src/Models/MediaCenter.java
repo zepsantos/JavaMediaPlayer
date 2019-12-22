@@ -33,7 +33,8 @@ public class MediaCenter {
     private User currentlyLoggedInUser;
 
     
-    private ArrayList<Content> userContentList;
+    private ArrayList<Content> userMusicContentList;
+    private ArrayList<VideoContent> userVideoContentList;
     private Content currentContent;
     private int index = 0;
     private int currentContentPos;
@@ -43,14 +44,19 @@ public class MediaCenter {
 
     public MediaCenter() {
         
-        this.userContentList = new ArrayList<>();
+        this.userMusicContentList = new ArrayList<>();
+        this.userVideoContentList = new ArrayList<>();
         this.playerStatus = PlayerStatus.STOP;
         currentlyLoggedInUser = null;
         new JFXPanel();
         
     }
     public ArrayList<Content> getUserContentList() {
-        return new ArrayList<>(userContentList);
+        return new ArrayList<>(userMusicContentList);
+    }
+    
+    public ArrayList<Content> getUserVideoContentList() {
+        return new ArrayList<>(userVideoContentList);
     }
     
     public void addFile(String fName){
@@ -59,17 +65,18 @@ public class MediaCenter {
         if(fName.endsWith(".mp3")){
             content = getTagAndCreateContent(fName);
         } else if(fName.endsWith(".avi")) { //TODO: ADICIONAR VIDEOS
-            
+            content = new VideoContent(fName,fName,Duration.ZERO);
         }  else { // CASO NAO ACABE EM NENHUMA DESTAS EXTENSOES
             
         }
            
         
-        
-        if(content != null){
-            this.userContentList.add(content);
-            ct.put(content.getNome(), content);
+        if(content != null) {
+            if(content instanceof MusicContent) this.userMusicContentList.add((MusicContent) content);
+            else this.userVideoContentList.add((VideoContent) content);
+            ct.put(content.getNome(),content);
         }
+       
  
     }
     
@@ -135,11 +142,11 @@ public class MediaCenter {
     }
     
     public int getPlayListSize(){
-        return this.userContentList.size();
+        return this.userMusicContentList.size();
     }
     
     public void readPlaylist() {
-        this.userContentList = new ArrayList<>( ConteudoDAO.getInstance().values());
+        this.userMusicContentList = new ArrayList<>(ConteudoDAO.getInstance().values());
     }
     
     
@@ -154,7 +161,7 @@ public class MediaCenter {
     
     private void reproduceMusic() {
         if(currentContent == null) {
-            currentContent = userContentList.get(index);
+            currentContent = userMusicContentList.get(index);
         if(currentContent == null) return;
             setMusicInPlayer(currentContent);
         } 
@@ -190,8 +197,8 @@ public class MediaCenter {
         currentPlayer = player;
         currentPlayer.setOnEndOfMedia(() -> {
                 
-            if(++index < userContentList.size()) {
-                currentContent = userContentList.get(index);
+            if(++index < userMusicContentList.size()) {
+                currentContent = userMusicContentList.get(index);
                 File tmp = new File("Conteudo/"+ currentContent.getPath());
                 Media media = new Media(tmp.toURI().toString());
                 setCurrentPlayer(new MediaPlayer(media));
@@ -217,7 +224,7 @@ public class MediaCenter {
     }
     
     public void play(int musicIndex) {
-        setMusicInPlayer(this.userContentList.get(musicIndex));
+        setMusicInPlayer(this.userMusicContentList.get(musicIndex));
         play();
     }
     
@@ -244,14 +251,14 @@ public class MediaCenter {
     
     public void skip_previous_song(){
         pause();
-        if(this.userContentList.size() == 0)return;
+        if(this.userMusicContentList.size() == 0)return;
         
         if(index > 0 ){
             index--;
         }else{
             index = 0;
         }
-        this.currentContent = this.userContentList.get(index);
+        this.currentContent = this.userMusicContentList.get(index);
         if(this.currentContent != null){
             File tmpFile = new File("Conteudo/" + currentContent.getPath());
             setCurrentPlayer(new MediaPlayer(new Media(tmpFile.toURI().toString())));
@@ -262,14 +269,14 @@ public class MediaCenter {
     public void skip_next_song(){
         pause();
         
-        if(this.userContentList.size() == 0)return;
+        if(this.userMusicContentList.size() == 0)return;
         
-        if(this.userContentList.size() > index + 1){
+        if(this.userMusicContentList.size() > index + 1){
             index++;
         }else{
             index = 0;
         }
-        this.currentContent = this.userContentList.get(index);
+        this.currentContent = this.userMusicContentList.get(index);
         if(this.currentContent != null){
             File tmpFile = new File("Conteudo/" + currentContent.getPath());
             setCurrentPlayer(new MediaPlayer(new Media(tmpFile.toURI().toString())));

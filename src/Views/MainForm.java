@@ -112,6 +112,11 @@ public class MainForm extends javax.swing.JFrame {
         myMediaButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         myMediaButton.setText("Meus Videos");
         myMediaButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        myMediaButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                myMediaButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -428,7 +433,6 @@ public class MainForm extends javax.swing.JFrame {
     
     private void drawPlaylistSection() {
         int i = 0;
-        String[] columnNames = {"Nome", "Artista", "Categoria", "Duracao" };
         DefaultTableModel model = (DefaultTableModel) musicTable.getModel();
         List<List<String>> tmp = playlistToTable();
         for(List<String> tableData : tmp) {
@@ -553,6 +557,14 @@ public class MainForm extends javax.swing.JFrame {
             }
         } 
     }//GEN-LAST:event_uploadButtonActionPerformed
+
+    private void myMediaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_myMediaButtonActionPerformed
+        // TODO add your handling code here:
+        String[] columnNames = {"Nome", "Categoria", "Duracao" };
+        DefaultTableModel model = new DefaultTableModel(columnNames,0);
+        
+        
+    }//GEN-LAST:event_myMediaButtonActionPerformed
     
     private void myMusicButtonActionPerformed(java.awt.event.ActionEvent evt){
     }
