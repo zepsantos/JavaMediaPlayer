@@ -61,6 +61,7 @@ public class ConteudoDAO implements Map<String,Content> {
         /*try(Connection con = DriverManager.getConnection("jdbc:mysql://localhost/mediacenter?user=root&password=1999pmqgslbop")){
             con.setAutoCommit(false);
             PreparedStatement sql;
+           
             sql = con.prepareStatement("SELECT * FROM tconteudos WHERE nome=?");
             sql.setString(1,(String)o);
             ResultSet rs = sql.executeQuery();
@@ -77,8 +78,26 @@ public class ConteudoDAO implements Map<String,Content> {
         }catch(SQLException e){
             System.out.println("Deu merda na excessao do get");
             //con.rollback();
-        } */
+        } 
+        return null; */
         return null;
+    }
+    
+    public int getMusicID(MusicContent mc) {
+        int tmp = -1;
+        try (Connection con = DriverManager.getConnection(urlDatabase)) {
+            Statement st = con.createStatement();
+            String sql = "SELECT * FROM MusicContent WHERE nome='"+(String)mc.getNome()+"'";
+            ResultSet rs = st.executeQuery(sql);
+            while(rs.next()) {
+                tmp = rs.getInt(1);
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("Erro ao obter o utilizador" + e.getMessage());
+        }
+        return tmp;
+        
     }
 
     @Override
@@ -169,6 +188,21 @@ public class ConteudoDAO implements Map<String,Content> {
             
             Collection<Content> col = new ArrayList<>();
             Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery("SELECT * FROM MusicContent");
+            
+            while (rs.next()) {
+                col.add(new MusicContent(rs.getString(2),rs.getString(3),rs.getInt(4), rs.getString(5),Duration.millis(rs.getLong(6))));
+            }
+            return col;
+        }
+        catch (Exception e) {throw new NullPointerException(e.getMessage());}
+    }
+    
+    public Collection<Content> valuesFromUser() {
+        try (Connection conn = DriverManager.getConnection(urlDatabase)) {
+            
+            Collection<Content> col = new ArrayList<>();
+            Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery("SELECT * FROM MusicContent WHERE user_id ="+ MediaCenter.getInstance().getUser().getUserID());
             
             while (rs.next()) {
@@ -177,6 +211,7 @@ public class ConteudoDAO implements Map<String,Content> {
             return col;
         }
         catch (Exception e) {throw new NullPointerException(e.getMessage());}
+    
     }
     
   
