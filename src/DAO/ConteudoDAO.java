@@ -58,9 +58,10 @@ public class ConteudoDAO implements Map<String,Content> {
 
     @Override
     public Content get(Object o) {
+        /*
         Content c = (Content) o;
         if(c instanceof MusicContent) return getMusicContent((MusicContent) c);
-        if(c instanceof VideoContent) return getVideoContent((VideoContent) c);
+        if(c instanceof VideoContent) return getVideoContent((VideoContent) c);*/
         return null;
     }
 
@@ -257,7 +258,7 @@ public class ConteudoDAO implements Map<String,Content> {
         try (Connection conn = DriverManager.getConnection(urlDatabase)) {
             
             Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("UPDATE VideoContent SET categoria="+cat);           
+            ResultSet rs = stm.executeQuery("UPDATE VideoContent SET categoria="+cat+"WHERE id ="+c.getID());           
         }
         catch (Exception e) {throw new NullPointerException(e.getMessage());}
     }
