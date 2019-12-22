@@ -30,6 +30,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;  
+import java.awt.event.*;  
 /**
  *
  * @author Pedro Gomes
@@ -683,7 +685,7 @@ public class MainForm extends javax.swing.JFrame {
     } 
     
     private void changeCategoria(){
-    
+        new ShowForm().setVisible(true);
     
     }
     

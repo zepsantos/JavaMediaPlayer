@@ -338,5 +338,10 @@ public class MediaCenter {
     }
     
     
+    public List<String> getAllCategorias(){
+        return null;
+    
+    }
+    
     
 }
