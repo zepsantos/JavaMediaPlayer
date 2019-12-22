@@ -6,10 +6,12 @@
 package Views;
 
 import Models.Content;
+import Models.FormState;
 import Models.MusicContent;
 import Models.MediaCenter;
 import Models.PlayerStatus;
 import Models.VideoContent;
+import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -34,7 +36,7 @@ import javax.swing.table.DefaultTableModel;
 public class MainForm extends javax.swing.JFrame {
     int musicShownPlaylist = 0;
     int videoShownPlayList = 0;
-
+    private FormState state = FormState.MinhasMusicas;
     
     
     /**
@@ -44,6 +46,7 @@ public class MainForm extends javax.swing.JFrame {
         
         initComponents();
         loadUser();
+        changeFocus();
         drawPlaylistSection();
         listenForClicksOnProgressBar();
         cleanLook();
@@ -547,8 +550,8 @@ public class MainForm extends javax.swing.JFrame {
     private void skipFwdButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_skipFwdButtonActionPerformed
         MediaCenter mc = MediaCenter.getInstance();
         if(mc.getPlayListSize() == 0)return;
-        stopButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Views/baseline_play_arrow_black_18dp.png")));
         mc.skip_next_song();
+        changeIconMusicStatus();
         updateMetaData();
         
     }//GEN-LAST:event_skipFwdButtonActionPerformed
@@ -556,8 +559,8 @@ public class MainForm extends javax.swing.JFrame {
     private void skipBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_skipBackButtonActionPerformed
         MediaCenter mc = MediaCenter.getInstance();
         if(mc.getPlayListSize() == 0)return;
-        stopButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Views/baseline_play_arrow_black_18dp.png")));
         mc.skip_previous_song();
+        changeIconMusicStatus();
         updateMetaData();
     }//GEN-LAST:event_skipBackButtonActionPerformed
 
@@ -589,6 +592,8 @@ public class MainForm extends javax.swing.JFrame {
 
     private void myMediaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_myMediaButtonActionPerformed
         // TODO add your handling code here:
+        state = FormState.MeusVideos;
+        changeFocus();
         drawMoviePlaylistSection();
         
     }//GEN-LAST:event_myMediaButtonActionPerformed
@@ -626,7 +631,6 @@ public class MainForm extends javax.swing.JFrame {
         musicTable.addMouseListener(new MouseAdapter() {
              @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                System.out.println("MOUSE CLICK MOVIE");
                     int column = musicTable.columnAtPoint(evt.getPoint());
                     int row = musicTable.rowAtPoint(evt.getPoint());
                     if(column == 2) {
@@ -671,8 +675,21 @@ public class MainForm extends javax.swing.JFrame {
         
     }
     
+    private void changeFocus() {
+        if(state == FormState.MinhasMusicas) {
+          myMusicButton.setForeground(Color.WHITE);
+          myMediaButton.setForeground(Color.BLACK);
+        } else {
+          myMusicButton.setForeground(Color.BLACK);
+          myMediaButton.setForeground(Color.WHITE);
+        }
+        
+    }
+    
     
     private void myMusicButtonActionPerformed(java.awt.event.ActionEvent evt){
+        state = FormState.MinhasMusicas;
+        changeFocus();
         drawPlaylistSection();
     }
     

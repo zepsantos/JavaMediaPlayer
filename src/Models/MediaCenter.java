@@ -273,7 +273,7 @@ public class MediaCenter {
    
     
     public void skip_previous_song(){
-        pause();
+        stopPlayer();
         if(this.userMusicContentList.size() == 0)return;
         
         if(index > 0 ){
@@ -286,11 +286,13 @@ public class MediaCenter {
             File tmpFile = new File("Conteudo/" + currentContent.getPath());
             setCurrentPlayer(new MediaPlayer(new Media(tmpFile.toURI().toString())));
         }
+        
+        this.playMusic();
     
     }
     
     public void skip_next_song(){
-        pause();
+        stopPlayer();
         
         if(this.userMusicContentList.size() == 0)return;
         
@@ -304,7 +306,7 @@ public class MediaCenter {
             File tmpFile = new File("Conteudo/" + currentContent.getPath());
             setCurrentPlayer(new MediaPlayer(new Media(tmpFile.toURI().toString())));
         }
-        
+        this.playMusic();
         
     }
     
