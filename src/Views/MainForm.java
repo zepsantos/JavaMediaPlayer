@@ -540,7 +540,7 @@ public class MainForm extends javax.swing.JFrame {
                     int row = musicTable.rowAtPoint(evt.getPoint());
                     if(column == 2) {
                         changeCategoriaMusica(row);
-                        System.out.println(row);
+                        
                     }else if(row>=0) {
                         mc.stopPlayer();
                         mc.playMusic(row,state);
@@ -569,7 +569,6 @@ public class MainForm extends javax.swing.JFrame {
             List<String> stringList = new ArrayList<>();
             stringList.add(cmc.getNome());
             stringList.add(cmc.getArtista());
-            System.out.println(cmc.getCategoria());
             if(cmc.getCategoria()<0 )stringList.add("Sem Categoria");
             else stringList.add(lista.get(cmc.getCategoria()).getNome());
             stringList.add(DurationToGoodLookingString(cmc.getTamanho()));
@@ -741,7 +740,7 @@ public class MainForm extends javax.swing.JFrame {
                     int column = musicTable.columnAtPoint(evt.getPoint());
                     int row = musicTable.rowAtPoint(evt.getPoint());
                     if(column == 1 && row >=0) {
-                        //changeCategoriaVideo(row);
+                        changeCategoriaVideo(row);
                     }else if(row>=0) {
                         mc.stopPlayer();
                         try {
@@ -766,11 +765,25 @@ public class MainForm extends javax.swing.JFrame {
     
     private void changeCategoriaMusica(int row){
         MediaCenter mc = MediaCenter.getInstance();
-        Content a = mc.getUserContentList().get(row);
-        new ShowForm(a).setVisible(true);
+        Content c = mc.getUserContentList().get(row);
+        new ShowForm(c).setVisible(true);
+        
+    }
+    
+    public void changeCategoriaVideo(int row){
+        MediaCenter mc = MediaCenter.getInstance();
+        Content c = mc.getUserVideoContentList().get(row);
+        new ShowForm(c).setVisible(true);
+    
     }
     
     
+    private void updateCategoriaTable(Content c){
+        System.out.println(c.getID());
+        
+    
+    
+    }
     
     
     private List<List<String>> MoviePlaylistToTable() {
@@ -788,8 +801,8 @@ public class MainForm extends javax.swing.JFrame {
                 VideoContent cmc = (VideoContent) c;
             List<String> stringList = new ArrayList<>();
             stringList.add(cmc.getNome());
-            if(cmc.getCategoria()<0 ) stringList.add("Sem Categoria");
-            else stringList.add(lista.get(cmc.getCategoria()).getNome());
+            if(cmc.getCategoria()<=0 ) stringList.add("Sem Categoria");
+            else stringList.add(lista.get(cmc.getCategoria()-1).getNome());
             stringList.add(DurationToGoodLookingString(cmc.getTamanho()));
             tmpList.add(stringList);
             }

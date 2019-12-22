@@ -61,5 +61,7 @@ public class VideoContent implements Content {
     public void setID(int id) {
         this.id = id;
     }
-    
+    public void setCategoria(int categoria){
+        this.categoria = categoria;
+    }
 }

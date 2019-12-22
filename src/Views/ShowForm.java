@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
 import javax.swing.JFileChooser;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -24,11 +25,13 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ShowForm extends javax.swing.JFrame {
     private Content c;
+   
     /**
      * Creates new form UploadForm
      */
     public ShowForm(Content x) {
         c = x;
+        
         initComponents();
         loadTable();
         
@@ -38,19 +41,37 @@ public class ShowForm extends javax.swing.JFrame {
     public void loadTable(){
         int i= 0;
         MediaCenter mc = MediaCenter.getInstance();
-        List<Categoria> lista = mc.getAllCategorias().stream().collect(toList());
-        List<String> s = new ArrayList();
-        for(Categoria c : lista){
-            s.add(c.getNome());
+        
+        if(c instanceof MusicContent){
+            List<Categoria> lista = mc.getAllCategorias().stream().collect(toList());
+            List<String> s = new ArrayList();
+            for(Categoria c : lista){
+                s.add(c.getNome());
+            }
+            loadTable(s,mc,lista);
+        }
+        if(c instanceof VideoContent){
+            List<Categoria> lista = mc.getALLCategoriasVideo().stream().collect(toList());
+            List<String> s = new ArrayList();
+            for(Categoria c : lista){
+                s.add(c.getNome());
+            }
+            loadTable(s,mc,lista);
         
         }
         
+    
+    }
+    
+    
+    private void loadTable(List<String> s,MediaCenter mc,List<Categoria> lista){
+        int i = 0;
         DefaultTableModel model = (DefaultTableModel) this.tabela.getModel();
         
         int tmp = s.size();
         while(i<tmp){
             model.addRow(s.stream().toArray());
-            s =s.subList(8,s.size());
+            if(tmp> 8)s =s.subList(8,s.size());
             i+=8;
         }
         this.tabela.addMouseListener(new MouseAdapter() {
@@ -161,6 +182,7 @@ public class ShowForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 

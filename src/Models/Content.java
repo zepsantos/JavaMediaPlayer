@@ -17,4 +17,5 @@ public interface Content {
     int getID();
     void setID(int id);
     Duration getTamanho();
+    void setCategoria(int categoria);
 }

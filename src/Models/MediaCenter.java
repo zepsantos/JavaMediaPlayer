@@ -368,6 +368,13 @@ public class MediaCenter {
         return cat.values();
     }
     
+    public Collection<Categoria> getALLCategoriasVideo(){
+        CategoriaDAO cat = CategoriaDAO.getInstance();
+        return cat.valuesVideo();
+    }
+    
+    
+    
     public String getCategoriaMusica(int id){
         CategoriaDAO cat = CategoriaDAO.getInstance();
         String categoria = cat.getCategoriaMusica(id);
@@ -385,6 +392,8 @@ public class MediaCenter {
     public void changemyCategoria(Content c,Categoria a){
         ConteudoDAO conteudo = ConteudoDAO.getInstance();
         conteudo.changeMyCategoria(c,a.getId());
+        c.setCategoria(a.getId());
+        
     }
     
     
