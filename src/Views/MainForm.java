@@ -493,7 +493,8 @@ public class MainForm extends javax.swing.JFrame {
                     int column = musicTable.columnAtPoint(evt.getPoint());
                     int row = musicTable.rowAtPoint(evt.getPoint());
                     if(column == 2) {
-                        // alterar categoria
+                        changeCategoriaMusica(row);
+                        System.out.println(row);
                     }else if(row>=0) {
                         mc.stopPlayer();
                         mc.playMusic(row);
@@ -666,7 +667,7 @@ public class MainForm extends javax.swing.JFrame {
                     int column = musicTable.columnAtPoint(evt.getPoint());
                     int row = musicTable.rowAtPoint(evt.getPoint());
                     if(column == 1 && row >=0) {
-                        changeCategoriaVideo(row);
+                        //changeCategoriaVideo(row);
                     }else if(row>=0) {
                         mc.stopPlayer();
                         try {
@@ -684,9 +685,9 @@ public class MainForm extends javax.swing.JFrame {
         
     } 
     
-    private void changeCategoriaVideo(int row){
+    private void changeCategoriaMusica(int row){
         MediaCenter mc = MediaCenter.getInstance();
-        Content a = mc.getUserVideoContentList().get(row);
+        Content a = mc.getUserContentList().get(row);
         new ShowForm(a).setVisible(true);
     }
     

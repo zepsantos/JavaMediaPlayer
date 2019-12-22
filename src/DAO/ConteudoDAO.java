@@ -72,7 +72,7 @@ public class ConteudoDAO implements Map<String,Content> {
             PreparedStatement sql;
            
             sql = con.prepareStatement("SELECT * FROM tconteudos WHERE nome=?");
-            sql.setString(1,(String)o);
+            sql.setString(1,c.getNome());
             ResultSet rs = sql.executeQuery();
             while(rs.next()){
                 int id = rs.getInt("id_content");
@@ -225,7 +225,7 @@ public class ConteudoDAO implements Map<String,Content> {
             ResultSet rs = stm.executeQuery("SELECT * FROM MusicContent");
             
             while (rs.next()) {
-                col.add(new MusicContent(rs.getString(2),rs.getString(3),rs.getInt(4), rs.getString(5),Duration.millis(rs.getLong(6))));
+                col.add(new MusicContent(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4), rs.getString(5),Duration.millis(rs.getLong(6))));
             }
             return col;
         }
@@ -240,7 +240,7 @@ public class ConteudoDAO implements Map<String,Content> {
             ResultSet rs = stm.executeQuery("SELECT * FROM MusicContent WHERE user_id ="+ MediaCenter.getInstance().getUser().getUserID());
             
             while (rs.next()) {
-                col.add(new MusicContent(rs.getString(2),rs.getString(3),rs.getInt(4), rs.getString(5),Duration.millis(rs.getLong(6))));
+                col.add(new MusicContent(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4), rs.getString(5),Duration.millis(rs.getLong(6))));
             }
             return col;
         }
@@ -279,8 +279,11 @@ public class ConteudoDAO implements Map<String,Content> {
     private void changeMyCategoriaVideo(VideoContent c,int cat){
         try (Connection conn = DriverManager.getConnection(urlDatabase)) {
             
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("UPDATE VideoContent SET categoria="+cat+"WHERE id ="+c.getID());           
+            String query = "UPDATE VideoContent SET categoria= ? WHERE id =?";
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setInt   (1, cat);
+            preparedStmt.setInt(2,c.getID());
+            preparedStmt.executeUpdate();    
         }
         catch (Exception e) {throw new NullPointerException(e.getMessage());}
     }
@@ -290,8 +293,12 @@ public class ConteudoDAO implements Map<String,Content> {
     private void changeMyCategoriaMusic(MusicContent c,int cat){
         try (Connection conn = DriverManager.getConnection(urlDatabase)) {
             
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("UPDATE MusicContent SET categoria="+cat+"WHERE id_content ="+c.getId_conteudo());           
+            String query = "UPDATE MusicContent SET categoria= ? WHERE id_content =?";
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setInt(1, cat);
+            preparedStmt.setInt(2,c.getID());
+            preparedStmt.executeUpdate();
+           
         }
         catch (Exception e) {throw new NullPointerException(e.getMessage());}
     }
