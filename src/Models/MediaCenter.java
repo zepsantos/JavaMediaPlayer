@@ -74,9 +74,10 @@ public class MediaCenter {
         if(fName.endsWith(".mp3")){
             content = getTagAndCreateContent(fName);
         } else if(fName.endsWith(".mp4")) { //TODO: ADICIONAR VIDEOS
-            content = new VideoContent(0,fName,0,fName,Duration.ZERO);
+         
+            content = new VideoContent(fName,0,fName,Duration.ZERO);
         }  else { // CASO NAO ACABE EM NENHUMA DESTAS EXTENSOES
-            
+          
         }
            
         
@@ -157,6 +158,7 @@ public class MediaCenter {
     public void readPlaylist() {
         this.userMusicContentList = new ArrayList<>(ConteudoDAO.getInstance().values());
         this.userVideoContentList = new ArrayList<>(ConteudoDAO.getInstance().MovieValues());
+        if(!this.userMusicContentList.isEmpty())this.currentContent = this.userMusicContentList.get(0);
     }
     
     

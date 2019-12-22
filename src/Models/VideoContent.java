@@ -15,6 +15,8 @@ public class VideoContent implements Content {
     private String path,nome;
     private Duration tamanho;
     private int categoria,id;
+    
+    
     public VideoContent(int id,String nome,int categoria, String path, Duration tamanho) {
         this.nome = nome;
         this.path = path;
@@ -23,6 +25,16 @@ public class VideoContent implements Content {
         this.id = id;
     }
 
+    public VideoContent(String name,int cat,String path,Duration tam){
+        this.nome = name;
+        this.path = path;
+        this.categoria = cat;
+        this.tamanho = tam;
+        this.id = -1;
+    
+    }
+    
+    
     @Override
     public String getPath() {
         return this.path;

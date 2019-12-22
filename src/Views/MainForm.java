@@ -33,6 +33,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MainForm extends javax.swing.JFrame {
     int musicShownPlaylist = 0;
+    int videoShownPlayList = 0;
 
     
     
@@ -361,9 +362,6 @@ public class MainForm extends javax.swing.JFrame {
         this.friendsListButton.setBorderPainted(false);
     }
     
-    private void myContentButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                
-        // TODO add your handling code here:
-    }                                                      
     
     private void listenForClicksOnProgressBar() {
         progressBar.addMouseListener(new MouseListener() {
@@ -440,12 +438,24 @@ public class MainForm extends javax.swing.JFrame {
     
     private void drawPlaylistSection() { //TODO: DESENHAR TABELA DE NOVO , TIRAR O LISTENER DOS MOVIES
         int i = 0;
+        String[] columnNames = {"Nome","Artista","Categoria", "Duracao" };
         DefaultTableModel model = (DefaultTableModel) musicTable.getModel();
+        
+        
+        if(this.videoShownPlayList > 0){
+            model.removeRow(this.videoShownPlayList-1);
+            this.videoShownPlayList--;
+        }
+        this.videoShownPlayList = 0;
+        
+        
+        model.setColumnIdentifiers(columnNames);
         List<List<String>> tmp = playlistToTable();
         for(List<String> tableData : tmp) {
             if(i>=musicShownPlaylist) {
             musicShownPlaylist++;
             model.addRow(tableData.stream().toArray());
+            
             }
             i++;
         }
@@ -575,7 +585,6 @@ public class MainForm extends javax.swing.JFrame {
 
     private void myMediaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_myMediaButtonActionPerformed
         // TODO add your handling code here:
-        musicShownPlaylist = 0;
         drawMoviePlaylistSection();
         
     }//GEN-LAST:event_myMediaButtonActionPerformed
@@ -589,12 +598,19 @@ public class MainForm extends javax.swing.JFrame {
     private void drawMoviePlaylistSection() {
         int i = 0;
         String[] columnNames = {"Nome", "Categoria", "Duracao" };
-        DefaultTableModel model = new DefaultTableModel(columnNames,0);
-
+        DefaultTableModel model = (DefaultTableModel) this.musicTable.getModel();
+        System.out.println(this.musicShownPlaylist);
+        while(this.musicShownPlaylist > 0){ // retira as musicas caso a tenha, capaz de dar merda tbh
+            model.removeRow(this.musicShownPlaylist-1);
+            this.musicShownPlaylist--;
+        }
+        this.musicShownPlaylist = 0;
+        model.setColumnIdentifiers(columnNames);
+        
         List<List<String>> tmp = MoviePlaylistToTable();
         for(List<String> tableData : tmp) {
-            if(i>=musicShownPlaylist) {
-            musicShownPlaylist++;
+            if(i>= this.videoShownPlayList) {
+            videoShownPlayList++;
             model.addRow(tableData.stream().toArray());
             }
             i++;
@@ -650,7 +666,7 @@ public class MainForm extends javax.swing.JFrame {
     
     
     private void myMusicButtonActionPerformed(java.awt.event.ActionEvent evt){
-        new ShowForm().setVisible(true);
+        drawPlaylistSection();
     }
     
     
