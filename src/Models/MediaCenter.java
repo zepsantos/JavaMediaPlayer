@@ -82,36 +82,60 @@ public class MediaCenter {
         if(fName.endsWith(".mp3")){
             //ver se existe
             content = getTagAndCreateContent(fName);
-        } else if(fName.endsWith(".mp4")) { //TODO: ADICIONAR VIDEOS
+        } else if(fName.endsWith(".mp4")) { 
          
             content = new VideoContent(fName,0,fName,Duration.ZERO);
         }  else { // CASO NAO ACABE EM NENHUMA DESTAS EXTENSOES
-          
+            System.out.println("Formato nao suportado");
         }
            
         
         if(content != null) {
+            boolean music = content instanceof MusicContent;
+            Content tmp = content;
+            
             
             content = ct.put(content.getNome(),content);
+           
+            System.out.println(content);
             if(content instanceof MusicContent){
                 int id = ct.getMusicID((MusicContent)content);
                 content.setID(id);
-                this.userMusicContentList.add((MusicContent) content);
+                addContentToLists(music, content);
             }
             else if(content instanceof VideoContent) {
                 int id = ct.getMovieID((VideoContent)content);
                 content.setID(id);
-                this.userVideoContentList.add((VideoContent) content);
+                addContentToLists(music, content);
             } else {
                 //TODO JA EXISTE NA DB
                 System.out.println("Ja existe o ficheiro adicionado");
-                if(ct.getOwner(content) != getUser().getUserID()) {
-                    ct.putRepeatedContent(content);
+                if(tmp instanceof MusicContent)
+                tmp.setID(ct.getMusicID((MusicContent)tmp));
+                else{
+                    tmp.setID(ct.getMovieID((VideoContent)tmp));
+                }
+                
+                if(ct.getOwner(tmp) != getUser().getUserID()) {
+                    if(ct.putRepeatedContent(tmp) != null ) {
+                     addContentToLists(music, tmp);
+                    }
                 }
             }
         }
        
  
+    }
+    
+    private void addContentToLists(boolean music,Content content) {
+        if(music){
+            this.userMusicContentList.add((MusicContent) content);
+                this.allMusicContentList.add((MusicContent)content);
+        }else {
+            this.userVideoContentList.add((VideoContent) content);
+        this.allVideoContentList.add((VideoContent) content);
+        }
+        
     }
     
     
