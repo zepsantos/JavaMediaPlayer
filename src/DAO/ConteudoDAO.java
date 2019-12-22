@@ -238,9 +238,32 @@ public class ConteudoDAO implements Map<String,Content> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-   
+    public void changeMyCategoria(Content c, int cat){
+        if(c instanceof MusicContent)changeMyCategoriaMusic((MusicContent) c,cat) ;
+        if(c instanceof VideoContent)changeMyCategoriaVideo((VideoContent)c,cat); 
+    
+    }
     
     
+    private void changeMyCategoriaVideo(VideoContent c,int cat){
+        try (Connection conn = DriverManager.getConnection(urlDatabase)) {
+            
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery("UPDATE VideoContent SET categoria="+cat);           
+        }
+        catch (Exception e) {throw new NullPointerException(e.getMessage());}
+    }
+    
+    
+    
+    private void changeMyCategoriaMusic(MusicContent c,int cat){
+        try (Connection conn = DriverManager.getConnection(urlDatabase)) {
+            
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery("UPDATE MusicContent SET categoria="+cat+"WHERE id_content ="+c.getId_conteudo());           
+        }
+        catch (Exception e) {throw new NullPointerException(e.getMessage());}
+    }
     
     
     

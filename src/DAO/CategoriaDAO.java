@@ -97,6 +97,7 @@ public class CategoriaDAO implements Map<String,Categoria> {
             while (rs.next()) {
                 col.add(new Categoria(rs.getInt(1),rs.getString(2)));
             }
+           
             return col;
         }
         catch (Exception e) {throw new NullPointerException(e.getMessage());}

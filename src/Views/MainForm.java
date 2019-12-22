@@ -665,8 +665,8 @@ public class MainForm extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                     int column = musicTable.columnAtPoint(evt.getPoint());
                     int row = musicTable.rowAtPoint(evt.getPoint());
-                    if(column == 1) {
-                        changeCategoria();
+                    if(column == 1 && row >=0) {
+                        changeCategoriaVideo(row);
                     }else if(row>=0) {
                         mc.stopPlayer();
                         try {
@@ -684,9 +684,10 @@ public class MainForm extends javax.swing.JFrame {
         
     } 
     
-    private void changeCategoria(){
-        new ShowForm().setVisible(true);
-    
+    private void changeCategoriaVideo(int row){
+        MediaCenter mc = MediaCenter.getInstance();
+        Content a = mc.getUserVideoContentList().get(row);
+        new ShowForm(a).setVisible(true);
     }
     
     

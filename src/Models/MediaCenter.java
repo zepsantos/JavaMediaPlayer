@@ -5,6 +5,7 @@
  */
 package Models;
 
+import DAO.CategoriaDAO;
 import DAO.UserDAO;
 import DAO.ConteudoDAO;
 import Views.MainForm;
@@ -338,10 +339,15 @@ public class MediaCenter {
     }
     
     
-    public List<String> getAllCategorias(){
-        return null;
-    
+    public Collection<Categoria> getAllCategorias(){
+        CategoriaDAO cat = CategoriaDAO.getInstance();
+        return cat.values();
     }
     
+    
+    public void changemyCategoria(Content c,Categoria a){
+        ConteudoDAO conteudo = ConteudoDAO.getInstance();
+        conteudo.changeMyCategoria(c,a.getId());
+    }
     
 }
