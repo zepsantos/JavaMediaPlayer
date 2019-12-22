@@ -40,6 +40,8 @@ public class MediaCenter {
     private ArrayList<VideoContent> userVideoContentList;
     private ArrayList<Content> allMusicContentList;
     private ArrayList<Content> allVideoContentList;
+
+    
     private Content currentContent;
     private int index = 0;
     private int currentContentPos;
@@ -342,6 +344,7 @@ public class MediaCenter {
         this.playerStatus = PlayerStatus.STOP;
         this.userMusicContentList = null;
         this.userVideoContentList = null;
+        this.inst = null;
         
     
     }
@@ -358,4 +361,12 @@ public class MediaCenter {
         conteudo.changeMyCategoria(c,a.getId());
     }
     
+    
+    public ArrayList<Content> getAllMusicContentList() {
+        return new ArrayList<>(allMusicContentList);
+    }
+
+    public ArrayList<Content> getAllVideoContentList() {
+        return new ArrayList<>(allVideoContentList);
+    }
 }
