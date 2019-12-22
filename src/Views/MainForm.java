@@ -33,6 +33,7 @@ import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;  
 import java.awt.event.*;  
+import javax.swing.event.TableModelEvent;
 /**
  *
  * @author Pedro Gomes
@@ -41,7 +42,7 @@ public class MainForm extends javax.swing.JFrame {
     int musicShownPlaylist = 0;
     int videoShownPlayList = 0;
     private FormState state = FormState.MinhasMusicas;
-    
+    private boolean changedState = false;
     
     /**
      * Creates new form MainMenu
@@ -507,9 +508,13 @@ public class MainForm extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) musicTable.getModel();
         
         
-        while(this.videoShownPlayList > 0){
-            this.videoShownPlayList--;
-            model.removeRow(this.videoShownPlayList);
+       if(changedState) {
+            int t = model.getRowCount();
+            while(t>0) {
+                model.removeRow(--t);
+            }
+            changedState = false;
+            this.musicShownPlaylist=0;
         }
         this.videoShownPlayList = 0;
         
@@ -538,7 +543,7 @@ public class MainForm extends javax.swing.JFrame {
                         System.out.println(row);
                     }else if(row>=0) {
                         mc.stopPlayer();
-                        mc.playMusic(row);
+                        mc.playMusic(row,state);
                         updateMusicInfo();
                         changeIconMusicStatus();
                     }
@@ -664,6 +669,7 @@ public class MainForm extends javax.swing.JFrame {
     private void myMediaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_myMediaButtonActionPerformed
         // TODO add your handling code here:
         state = FormState.MeusVideos;
+        changedState = true;
         changeFocus();
         drawMoviePlaylistSection();
         
@@ -684,6 +690,7 @@ public class MainForm extends javax.swing.JFrame {
     private void allMusicButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allMusicButtonActionPerformed
         // TODO add your handling code here:
         state = FormState.TodasMusicas;
+        changedState = true;
         changeFocus();
         drawPlaylistSection();
     }//GEN-LAST:event_allMusicButtonActionPerformed
@@ -691,6 +698,7 @@ public class MainForm extends javax.swing.JFrame {
     private void allMideaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allMideaButtonActionPerformed
         // TODO add your handling code here:
         state = FormState.TodosVideos;
+        changedState = true;
         changeFocus();
         drawMoviePlaylistSection();
     }//GEN-LAST:event_allMideaButtonActionPerformed
@@ -705,11 +713,13 @@ public class MainForm extends javax.swing.JFrame {
         int i = 0;
         String[] columnNames = {"Nome", "Categoria", "Duracao" };
         DefaultTableModel model = (DefaultTableModel) this.musicTable.getModel();
-        
-        while(this.musicShownPlaylist > 0){ // retira as musicas caso a tenha, capaz de dar merda tbh
-            this.musicShownPlaylist--;
-            model.removeRow(this.musicShownPlaylist);
-            
+        if(changedState) {
+            int t = model.getRowCount();
+            while(t>0) {
+                model.removeRow(--t);
+            }
+            this.videoShownPlayList = 0;
+            changedState = false;
         }
         this.musicShownPlaylist = 0;
         model.setColumnIdentifiers(columnNames);
@@ -735,7 +745,12 @@ public class MainForm extends javax.swing.JFrame {
                     }else if(row>=0) {
                         mc.stopPlayer();
                         try {
-                            Desktop.getDesktop().open(new File("Conteudo/" + mc.getUserVideoContentList().get(row).getPath()));
+                            File f;
+                            if(state == FormState.MeusVideos)
+                                f=new File("Conteudo/" + mc.getUserVideoContentList().get(row).getPath());
+                            else
+                                f=new File("Conteudo/" + mc.getAllVideoContentList().get(row).getPath());
+                            Desktop.getDesktop().open(f);
                         }catch(IOException e) {
                             e.printStackTrace();
                         }
@@ -810,6 +825,7 @@ public class MainForm extends javax.swing.JFrame {
     
     private void myMusicButtonActionPerformed(java.awt.event.ActionEvent evt){
         state = FormState.MinhasMusicas;
+        changedState = true;
         changeFocus();
         drawPlaylistSection();
     }

@@ -266,8 +266,10 @@ public class MediaCenter {
         reproduceMusic();
     }
     
-    public void playMusic(int index) {
+    public void playMusic(int index,FormState state) {
+        if(state == FormState.MinhasMusicas)
         setContentInPlayer(this.userMusicContentList.get(index));
+        else setContentInPlayer(this.allMusicContentList.get(index));
         playMusic();
     }
     
